@@ -73,3 +73,6 @@ temp/
 *.rar
 *.tar
 *.zip
+
+# Bicep parameter files
+*.bicepparam

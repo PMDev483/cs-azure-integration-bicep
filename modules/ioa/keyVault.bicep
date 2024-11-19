@@ -1,9 +1,10 @@
 param keyVaultName string
-param location string = resourceGroup().location
+param virtualNetworkName string
 param falconClientId string
 @secure()
 param falconClientSecret string
-param virtualNetworkName string
+param location string = resourceGroup().location
+param tags object = {}
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' existing = {
   name: virtualNetworkName
@@ -12,12 +13,12 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' existing 
 resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
   name: keyVaultName
   location: location
-  tags: {}
+  tags: tags
   properties: {
-    enabledForDeployment: true
-    enabledForTemplateDeployment: true
-    enablePurgeProtection: true
+    enabledForDeployment: false
+    enabledForTemplateDeployment: false
     enabledForDiskEncryption: false
+    enablePurgeProtection: true
     enableRbacAuthorization: true
     enableSoftDelete: true
     networkAcls: {
@@ -43,14 +44,33 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
     softDeleteRetentionInDays: 7
     tenantId: subscription().tenantId
   }
-  dependsOn: [
-    virtualNetwork
-  ]
+}
+
+resource keyVaultPrivateEndpoint 'Microsoft.Network/privateEndpoints@2022-01-01' = {
+  name: 'kv-private-endpoint'
+  location: location
+  tags: tags
+  properties: {
+    privateLinkServiceConnections: [
+      {
+        name: 'cs-kv-private-endpoint'
+        properties: {
+          privateLinkServiceId: keyVault.id
+          groupIds: [
+            'vault'
+          ]
+        }
+      }
+    ]
+    subnet: {
+      id: virtualNetwork.properties.subnets[2].id
+    }
+  }
 }
 
 resource csLogStorageKey 'Microsoft.KeyVault/vaults/keys@2023-07-01' = {
   name: 'cs-log-storage-key'
-  tags: {}
+  tags: tags
   parent: keyVault
   properties: {
     attributes: {
@@ -72,7 +92,7 @@ resource csLogStorageKey 'Microsoft.KeyVault/vaults/keys@2023-07-01' = {
 
 resource activityLogStorageKey 'Microsoft.KeyVault/vaults/keys@2023-07-01' = {
   name: 'cs-activity-storage-key'
-  tags: {}
+  tags: tags
   parent: keyVault
   properties: {
     attributes: {
@@ -94,7 +114,7 @@ resource activityLogStorageKey 'Microsoft.KeyVault/vaults/keys@2023-07-01' = {
 
 resource entraLogStorageKey 'Microsoft.KeyVault/vaults/keys@2023-07-01' = {
   name: 'cs-aad-storage-key'
-  tags: {}
+  tags: tags
   parent: keyVault
   properties: {
     attributes: {
@@ -114,25 +134,9 @@ resource entraLogStorageKey 'Microsoft.KeyVault/vaults/keys@2023-07-01' = {
   }
 }
 
-resource clientId 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
-  parent: keyVault
-  name: 'falcon-client-id'
-  properties: {
-    value: falconClientId
-  }
-}
-
-resource clientSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
-  parent: keyVault
-  name: 'falcon-client-secret'
-  properties: {
-    value: falconClientSecret
-  }
-}
-
 resource csClientId 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   name: 'cs-client-id'
-  tags: {}
+  tags: tags
   parent: keyVault
   properties: {
     attributes: {
@@ -144,7 +148,7 @@ resource csClientId 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
 
 resource csClientSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   name: 'cs-client-secret'
-  tags: {}
+  tags: tags
   parent: keyVault
   properties: {
     attributes: {
@@ -154,7 +158,6 @@ resource csClientSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   }
 }
 
-output keyVaultResourceId string = keyVault.id
 output keyVaultName string = keyVault.name
 output csLogStorageKeyName string = csLogStorageKey.name
 output activityLogStorageKeyName string = activityLogStorageKey.name

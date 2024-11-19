@@ -1,4 +1,5 @@
 param virtualNetworkName string
+param networkSecurityGroupName string
 param subnetNames array = [
   'cs-subnet-1'
   'cs-subnet-2'
@@ -6,6 +7,15 @@ param subnetNames array = [
 ]
 param location string = resourceGroup().location
 param tags object = {}
+
+resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2024-03-01' = {
+  name: networkSecurityGroupName
+  location: location
+  tags: tags
+  properties: {
+    securityRules: []
+  }
+}
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
   name: virtualNetworkName
@@ -22,6 +32,9 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
         name: subnetNames[0]
         properties: {
           addressPrefix: '10.0.0.0/24'
+          networkSecurityGroup: {
+            id: networkSecurityGroup.id
+          }
           delegations: [
             {
               name: 'delegation'
@@ -41,6 +54,9 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
         name: subnetNames[1]
         properties: {
           addressPrefix: '10.0.1.0/24'
+          networkSecurityGroup: {
+            id: networkSecurityGroup.id
+          }
           delegations: [
             {
               name: 'delegation'
@@ -60,6 +76,9 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
         name: subnetNames[2]
         properties: {
           addressPrefix: '10.0.3.0/24'
+          networkSecurityGroup: {
+            id: networkSecurityGroup.id
+          }
           serviceEndpoints: [
             { service: 'Microsoft.KeyVault' }
             { service: 'Microsoft.Storage' }
@@ -73,11 +92,11 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
   resource csSubnet1 'subnets' existing = {
     name: subnetNames[0]
   }
-  
+
   resource csSubnet2 'subnets' existing = {
     name: subnetNames[1]
   }
-  
+
   resource csSubnet3 'subnets' existing = {
     name: subnetNames[2]
   }

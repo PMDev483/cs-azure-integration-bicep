@@ -7,9 +7,9 @@ param eventHubNamespaceName string
 param eventHubName string
 param virtualNetworkName string
 param virtualNetworkSubnetId string
-param csCID string
-param csClientIdUri string
-param csClientSecretUri string
+param falconCID string
+param falconClientIdUri string
+param falconClientSecretUri string
 param diagnosticSettingName string
 param location string = resourceGroup().location
 param tags object = {}
@@ -27,8 +27,8 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2022-09-01' = {
   location: location
   tags: tags
   sku: {
-    name: 'B1'
-    tier: 'Basic'
+    name: 'P0V3'
+    tier: 'Premium'
   }
   kind: 'Linux'
   properties: {
@@ -58,7 +58,7 @@ resource functionApp 'Microsoft.Web/sites@2020-12-01' = {
       appSettings: [
         {
           name:'PYTHON_THREADPOOL_THREAD_COUNT' 
-          value: '2'
+          value: '4'
         }
         {
           name: 'FUNCTIONS_WORKER_PROCESS_COUNT'
@@ -106,11 +106,11 @@ resource functionApp 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'CS_CLIENT_ID'
-          value: '@Microsoft.KeyVault(SecretUri=${csClientIdUri})'
+          value: '@Microsoft.KeyVault(SecretUri=${falconClientIdUri})'
         }
         {
           name: 'CS_CLIENT_SECRET'
-          value: '@Microsoft.KeyVault(SecretUri=${csClientSecretUri})'
+          value: '@Microsoft.KeyVault(SecretUri=${falconClientSecretUri})'
         }
         {
           name: 'CS_AUTH_MODE'
@@ -118,7 +118,7 @@ resource functionApp 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'CS_CID'
-          value: csCID
+          value: falconCID
         }
         {
           name: 'WEBSITE_VNET_ROUTE_ALL'

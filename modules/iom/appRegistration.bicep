@@ -1,14 +1,9 @@
-
 targetScope = 'subscription'
 
-// entra-external-setup.bicep
-extension microsoftGraph
+extension 'br:mcr.microsoft.com/bicep/extensions/microsoftgraph/v1.0:0.1.8-preview'
 
-param appName string = 'crowdstrike'
-param deployEnvironment string = 'cspm'
-
-var applicationRegistrationName = '${appName}-${deployEnvironment}-app'
-var redirectUris = ['https://localhost']
+var applicationRegistrationName = 'CrowdStrikeCSPM'
+var redirectUris = ['https://falcon.crowdstrike.com/cloud-security/registration/app/cspm/cspm_accounts']
 
 resource microsoftGraphServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' existing = {
   appId: '00000003-0000-0000-c000-000000000000'
@@ -38,6 +33,7 @@ resource applicationRegistration 'Microsoft.Graph/applications@v1.0' = {
         {id: '9a5d68dd-52b0-4cc2-bd40-abcf44ac3a30', type: 'Role'} // Application.Read.All
         {id: 'b0afded3-3588-46d8-8b3d-9842eff778da', type: 'Role'} // AuditLog.Read.All
         {id: '97235f07-e226-4f63-ace3-39588e11d3a1', type: 'Role'} // User.ReadBasic.All
+        {id: '18a4783c-866b-4cc7-a460-3d5e5662c884', type: 'Role'} // Application.ReadWrite.OwnedBy
       ]
     }
   ]
