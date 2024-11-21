@@ -60,7 +60,7 @@ resource activityLogEventHub 'Microsoft.EventHub/namespaces/eventhubs@2024-01-01
   name: activityLogEventHubName
   parent: eventHubNamespace
   properties: {
-    partitionCount: 8
+    partitionCount: 16
     retentionDescription: {
       cleanupPolicy: 'Delete'
       retentionTimeInHours: 24
@@ -72,7 +72,7 @@ resource entraLogEventHub 'Microsoft.EventHub/namespaces/eventhubs@2024-01-01' =
   name: entraLogEventHubName
   parent: eventHubNamespace
   properties: {
-    partitionCount: 8
+    partitionCount: 16
     retentionDescription: {
       cleanupPolicy: 'Delete'
       retentionTimeInHours: 24

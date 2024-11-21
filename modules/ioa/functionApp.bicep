@@ -161,7 +161,7 @@ resource autoscaleSetting 'Microsoft.Insights/autoscalesettings@2022-10-01' = {
         name: hostingPlan.name
         capacity: {
           default: '1'
-          maximum: '8'
+          maximum: '4'
           minimum: '1'
         }
         rules: [
