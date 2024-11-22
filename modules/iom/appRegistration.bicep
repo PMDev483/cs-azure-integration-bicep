@@ -1,17 +1,20 @@
 targetScope = 'subscription'
+
 extension microsoftGraphV1
 
+/* Parameters */
+@secure()
+@description('Public certificate data.')
+param publicCertificate string
+
+/* Variables */
 var applicationName = 'CrowdStrikeCSPM-${uniqueString(subscription().subscriptionId)}'
 var applicationDescription = 'CrowdStrike Falcon CSPM'
 var redirectUris = ['https://falcon.crowdstrike.com/cloud-security/registration/app/cspm/cspm_accounts']
 
-resource microsoftGraphServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' existing = {
-  appId: '00000003-0000-0000-c000-000000000000'
-}
-
 var applicationPermissions = [
   { name: 'Application.Read.All', id: '9a5d68dd-52b0-4cc2-bd40-abcf44ac3a30', type: 'Role' }
-  { name: 'Application.ReadWrite.OwnedBy', id: '18a4783c-866b-4cc7-a460-3d5e5662c884', type: 'Role' }
+  //{ name: 'Application.ReadWrite.OwnedBy', id: '18a4783c-866b-4cc7-a460-3d5e5662c884', type: 'Role' }
   { name: 'AuditLog.Read.All', id: 'b0afded3-3588-46d8-8b3d-9842eff778da', type: 'Role' }
   { name: 'DeviceManagementRBAC.Read.All', id: '49f0cc30-024c-4dfd-ab3e-82e137ee5431', type: 'Scope' }
   { name: 'Directory.Read.All', id: '7ab1d382-f21e-4acd-a863-ba3e13f7da61', type: 'Role' }
@@ -24,11 +27,22 @@ var applicationPermissions = [
   { name: 'UserAuthenticationMethod.Read.All', id: 'aec28ec7-4d02-4e8c-b864-50163aea77eb', type: 'Scope' }
 ]
 
+/* Resources */
+resource microsoftGraphServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' existing = {
+  appId: '00000003-0000-0000-c000-000000000000'
+}
+
 /* Create Application Registration in Entra Id */
 resource application 'Microsoft.Graph/applications@v1.0' = {
   description: applicationDescription
   displayName: applicationName
-  // passwordCredentials: []
+  keyCredentials: [
+    {
+      key: publicCertificate
+      type: 'AsymmetricX509Cert'
+      usage: 'Verify'
+    }
+  ]
   requiredResourceAccess: [
     {
       resourceAccess: [for permission in applicationPermissions: { id: permission.id, type: permission.type }]
