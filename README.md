@@ -12,8 +12,8 @@ The command below creates a new app registration in Entra ID, including the requ
 - ***Cloud Application Administrator*** or ***Application Administrator*** - to create the app registration in Microsoft Entra ID
 - ***Privileged Role Administrator*** or ***Global Administrator*** - to provide administrative consent to the requested Microsoft Graph API permissions.
 
-  > [!NOTE]
-  > Use the optional *grantAdminConsent* parameter to disable granting administrative consent to the requested Microsoft Graph API permissions automatically.
+> [!NOTE]
+> Use the optional *grantAdminConsent* parameter to disable granting administrative consent to the requested Microsoft Graph API permissions automatically.
 
 #### Deployment command
 
@@ -26,7 +26,6 @@ az deployment sub create --name 'cs-cspm-appregistration' --location westeurope 
 #### Parameters
 
 | Parameter name | Required | Description |
-| --- | --- | --- |
 | applicationName | no | Name of the App registration in Entra ID. Defaults to **CrowdStrikeCSPM-${uniqueString}**, e.g. **CrowdStrikeCSPM-2452hzjqllbqm** |
 | publicCertificate | no | Base64-encoded string of the public certificate raw data. Default is **empty**. This certificate is used to connect from the Falcon platform to Azure. |
 | grantAdminConsent | no | Provide admin consent to Microsoft Graph API permissions automatically. Defaults to **true**. Requires ***Privileged Role Administrator*** or ***Global Administrator*** permissions in Entra ID. |
@@ -51,8 +50,9 @@ The command below registers a single Azure Subscription into CrowdStrike Falcon 
 - ***Cloud Application Administrator*** or ***Application Administrator*** role in Microsoft Entra ID - to create the app registration in Microsoft Entra ID
 - ***Privileged Role Administrator*** or ***Global Administrator*** role in Microsoft Entra ID - to provide administrative consent to the requested Microsoft Graph API permissions.
   
-  > [!NOTE]
-  > Use the optional *grantAdminConsent* parameter to disable granting administrative consent to the requested Microsoft Graph API permissions automatically.
+> [!NOTE]
+> Use the optional *grantAdminConsent* parameter to disable granting administrative consent to the requested Microsoft Graph API permissions automatically.
+
 - ***Owner*** role of the Azure subscription to be integrated into CrowdStrike Falcon Cloud Security
 
 #### Deployment command
@@ -64,7 +64,7 @@ az deployment sub create --name 'cs-cspm-subscription-deployment' --location wes
 ```
 
 > [!NOTE]
-> The command can be executed again to register additional Azure subscriptions int CrowdStrike Falcon Cloud Security.
+> The deployment command can be executed multiple times to register additional Azure subscriptions into CrowdStrike Falcon Cloud Security.
 
 #### Parameters
 
@@ -105,15 +105,16 @@ The command below registers an Azure management group, including all Azure subsc
 - Integrates the Subscription into the CrowdStrike Falcon Cloud Security for Indicator of Misconfiguration (IOM) and Indicator of Attack (IOA) assessment
 
 > [!IMPORTANT]
-> Registration currently only supports the Tenant Root Group.
+> Registration currently supports the Azure Tenant Root Group only.
 
 #### Required permissions
 
 - ***Cloud Application Administrator*** or ***Application Administrator*** role in Microsoft Entra ID - to create the app registration in Microsoft Entra ID
 - ***Privileged Role Administrator*** or ***Global Administrator*** role in Microsoft Entra ID - to provide administrative consent to the requested Microsoft Graph API permissions.
   
-  > [!NOTE]
-  > Use the optional *grantAdminConsent* parameter to disable granting administrative consent to the requested Microsoft Graph API permissions automatically.
+> [!NOTE]
+> Use the optional *grantAdminConsent* parameter to disable granting administrative consent to the requested Microsoft Graph API permissions automatically.
+
 - ***MISSING*** role for the Azure management group to be integrated into CrowdStrike Falcon Cloud Security
 - ***Owner*** role for the Azure subscription to be used for deployment of the infrastructure for Indicator of Attack (IOA) assessment
 
@@ -130,7 +131,6 @@ az deployment mg create --name 'cs-cspm-managementgroup-deployment' --location w
 
 | Parameter name | Required | Description |
 | --- | --- | --- |
-|  |  |  |
 | defaultSubscriptionId | yes | Subscription Id of the default Azure Subscription. |
 | falconCID | yes | CID for the Falcon API. |
 | falconClientId | yes | Client ID for the Falcon API. |
