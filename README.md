@@ -6,10 +6,10 @@ The Azure Bicep templates provided in this repository allow for an easy and seam
 
 ## Deployment using Azure CLI
 
-### Optional - Create Application Registration
+### Create Application Registration (Optional)
 
 The command below creates a new app registration in Entra ID, including the required Microsoft Graph API permissions. This command needs to be executed by a user having the following Entra ID roles:
-- ***Cloud Application Administrator*** or ***Application Administrator*** - to create the app registration in Microsoft Entra ID
+- ***Application Developer***, ***Cloud Application Administrator*** or ***Application Administrator*** - to create the app registration in Microsoft Entra ID
 - ***Privileged Role Administrator*** or ***Global Administrator*** - to provide administrative consent to the requested Microsoft Graph API permissions.
 
 > [!NOTE]
@@ -48,7 +48,7 @@ The command below registers a single Azure Subscription into CrowdStrike Falcon 
 
 #### Required permissions
 
-- ***Cloud Application Administrator*** or ***Application Administrator*** role in Microsoft Entra ID - to create the app registration in Microsoft Entra ID
+- ***Application Developer***, ***Cloud Application Administrator*** or ***Application Administrator*** role in Microsoft Entra ID - to create the app registration in Microsoft Entra ID
 - ***Privileged Role Administrator*** or ***Global Administrator*** role in Microsoft Entra ID - to provide administrative consent to the requested Microsoft Graph API permissions.
   
 > [!NOTE]
@@ -106,17 +106,17 @@ The command below registers an Azure management group, including all Azure subsc
 - Integrates the Subscription into the CrowdStrike Falcon Cloud Security for Indicator of Misconfiguration (IOM) and Indicator of Attack (IOA) assessment
 
 > [!IMPORTANT]
-> Registration currently supports the Azure Tenant Root Group only.
+> Registration only supports the Azure root management group (Tenant root group).
 
 #### Required permissions
 
-- ***Cloud Application Administrator*** or ***Application Administrator*** role in Microsoft Entra ID - to create the app registration in Microsoft Entra ID
+- ***Application Developer***, ***Cloud Application Administrator*** or ***Application Administrator*** role in Microsoft Entra ID - to create the app registration in Microsoft Entra ID
 - ***Privileged Role Administrator*** or ***Global Administrator*** role in Microsoft Entra ID - to provide administrative consent to the requested Microsoft Graph API permissions.
   
 > [!NOTE]
 > Use the optional *grantAdminConsent* parameter to disable granting administrative consent to the requested Microsoft Graph API permissions automatically.
 
-- ***MISSING*** role for the Azure management group to be integrated into CrowdStrike Falcon Cloud Security
+- ***Owner*** role for the Azure management group to be integrated into CrowdStrike Falcon Cloud Security
 - ***Owner*** role for the Azure subscription to be used for deployment of the infrastructure for Indicator of Attack (IOA) assessment
 
 #### Deployment command
@@ -124,7 +124,6 @@ The command below registers an Azure management group, including all Azure subsc
 ```sh
 az deployment mg create --name 'cs-cspm-managementgroup-deployment' --location westeurope \
   --management-group-id $(az account show --query tenantId -o tsv) \
-  --template-file cs-cspm-deployment-managementGroup.bicep \
   --only-show-errors
 ```
 
@@ -152,6 +151,12 @@ az deployment mg create --name 'cs-cspm-managementgroup-deployment' --location w
 | enableAppInsights | no | Enable Application Insights for additional logging of Function Apps. Defaults to ***false***. |
 | deployActivityLogDiagnosticSettings | no | Deploy Activity Log Diagnostic Settings. Defaults to ***true***. |
 | deployEntraLogDiagnosticSettings | no | Deploy Entra Log Diagnostic Settings. Defaults to ***true***. |
+
+## Examples
+
+### Using existing app registration in Entra ID
+> [!IMPORTANT]
+> To use an existing app registraiton Application.ReadWrite.OwnedBy.
 
 ## Contributing
 

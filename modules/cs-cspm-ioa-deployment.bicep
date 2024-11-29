@@ -265,7 +265,7 @@ module activityLogFunctionIdentity 'ioa/functionIdentity.bicep' = {
   ]
 }
 
-/* Create Azuure Function to forward Activity Logs to CrowdStrike */
+/* Create Azure Function to forward Activity Logs to CrowdStrike */
 module activityLogFunction 'ioa/functionApp.bicep' = {
   name: '${deploymentNamePrefix}-activityLogFunction-${deploymentNameSuffix}'
   scope: scope
@@ -309,7 +309,7 @@ module entraLogFunctionIdentity 'ioa/functionIdentity.bicep' = {
   ]
 }
 
-/* Create Azuure Function to forward Entra ID Logs to CrowdStrike */
+/* Create Azure Function to forward Entra ID Logs to CrowdStrike */
 module entraLogFunction 'ioa/functionApp.bicep' = {
   name: '${deploymentNamePrefix}-entraLogFunction-${deploymentNameSuffix}'
   scope: scope
