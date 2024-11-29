@@ -1,5 +1,7 @@
 targetScope = 'subscription'
 
+extension microsoftGraphV1
+
 @description('Targetscope of the IOM integration.')
 @allowed([
   'ManagementGroup'
@@ -31,15 +33,21 @@ param falconClientSecret string
 ])
 param falconCloudRegion string = 'US-1'
 
-@description('Id of the Application Registration in Entra ID.')
-param azureClientId string
+@description('Use existing Application Registration. Defaults to false.')
+param useExistingAppRegistration bool = false
 
-@description('Password/Secret of the Application Registration in Entra ID.')
+@description('Grant admin consent for Application Registration. Defaults to true.')
+param grantAppRegistrationAdminConsent bool = true
+
+@description('Application Id of an existing Application Registration in Entra ID.')
+param azureClientId string = ''
+
+@description('Application Secret of an existing Application Registration in Entra ID.')
 @secure()
-param azureClientSecret string
+param azureClientSecret string = ''
 
 @description('Principal Id of the Application Registration in Entra ID.')
-param azurePrincipalId string
+param azurePrincipalId string = ''
 
 @description('Type of the Principal, defaults to ServicePrincipal.')
 param azurePrincipalType string = 'ServicePrincipal'
@@ -54,22 +62,25 @@ param assignAzureSubscriptionPermissions bool = true
 param location string = deployment().location
 
 @description('Tags to be applied to all resources.')
-param tags object = {}
-
-/* Variables */
-var roleDefinitionIds = [
-  'acdd72a7-3385-48ef-bd42-f606fba81ae7' // Reader
-  '39bc4728-0917-49c7-9d2c-d95423bc2eb4' // Security Reader
-  '21090545-7ca7-4776-b22c-e363652d74d2' // Key Vault Reader
-  '7f6c6a51-bcf8-42ba-9220-52d62157d7db' // Azure Kubernetes Service RBAC Reader
-  'de139f84-1756-47ae-9be6-808fbbe84772' // Website Contributor
-]
+param tags object = {
+  'cstag-vendor': 'crowdstrike'
+  'cstag-product': 'fcs'
+  'cstag-purpose': 'cspm'
+}
 
 /* Create Azure Resource Group for IOM resources */
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-03-01' = {
   name: resourceGroupName
   location: location
   tags: tags
+}
+
+/* Create Application Registration */
+module azureAppRegistration 'azureAppRegistration.bicep' = if (!useExistingAppRegistration) {
+  name: '${deploymentNamePrefix}-azureAppRegistration-${deploymentNameSuffix}'
+  params: {
+    grantAdminConsent: grantAppRegistrationAdminConsent
+  }
 }
 
 /* Integrate Azure account into Falcon */
@@ -80,21 +91,41 @@ module azureAccount 'azureAccount.bicep' = {
     falconClientId: falconClientId
     falconClientSecret: falconClientSecret
     falconCloudRegion: falconCloudRegion
-    azureClientId: azureClientId
-    azureClientSecret: azureClientSecret
+    useExistingAppRegistration: useExistingAppRegistration
+    azureClientId: useExistingAppRegistration ? azureClientId : azureAppRegistration.outputs.applicationId
+    azureClientSecret: useExistingAppRegistration ? azureClientSecret : ''
     azureAccountType: azureAccountType
     targetScope: targetScope
   }
+  dependsOn: [
+    azureAppRegistration
+  ]
+}
+
+/* Update Application Registration with Falcon provided certificate */
+module azureAppRegistrationUpdate 'azureAppRegistration.bicep' = if (!useExistingAppRegistration) {
+  name: '${deploymentNamePrefix}-azureAppRegistrationUpdate-${deploymentNameSuffix}'
+  params: {
+    publicCertificate: azureAccount.outputs.azurePublicCertificate
+    grantAdminConsent: grantAppRegistrationAdminConsent
+  }
+  dependsOn: [
+    azureAccount
+  ]
 }
 
 /* Assign required permissions on Azure Subscription */
-resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
-  for roleDefinitionId in roleDefinitionIds: if (assignAzureSubscriptionPermissions) {
-    name: guid(azurePrincipalId, roleDefinitionId, subscription().id)
-    properties: {
-      roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionId)
-      principalId: azurePrincipalId
-      principalType: azurePrincipalType
-    }
+module azureSubscriptionRoleAssignment 'azureSubscriptionRoleAssignment.bicep' = if (assignAzureSubscriptionPermissions) {
+  name: '${deploymentNamePrefix}-azureSubscriptionRoleAssignment-${deploymentNameSuffix}'
+  params: {
+    azurePrincipalType: azurePrincipalType
+    azurePrincipalId: useExistingAppRegistration ? azurePrincipalId : azureAppRegistration.outputs.servicePrincipalId
   }
-]
+}
+
+/* Outputs */
+output azureClientId string = useExistingAppRegistration ? azureClientId : azureAppRegistration.outputs.applicationId
+output azurePrincipalId string = useExistingAppRegistration
+  ? azurePrincipalId
+  : azureAppRegistration.outputs.servicePrincipalId
+output azurePublicCertificate string = azureAccount.outputs.azurePublicCertificate

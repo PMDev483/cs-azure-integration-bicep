@@ -3,18 +3,22 @@ targetScope = 'subscription'
 extension microsoftGraphV1
 
 /* Parameters */
+@description('Name of the Application Registration.')
+param applicationName string = 'CrowdStrikeCSPM-${uniqueString(tenant().tenantId)}'
+
 @secure()
 @description('Public certificate data.')
-param publicCertificate string
+param publicCertificate string = ''
+
+@description('Grant admin consent to Graph API permissions automatically. Defaults to true.')
+param grantAdminConsent bool = true
 
 /* Variables */
-var applicationName = 'CrowdStrikeCSPM-${uniqueString(subscription().subscriptionId)}'
 var applicationDescription = 'CrowdStrike Falcon CSPM'
 var redirectUris = ['https://falcon.crowdstrike.com/cloud-security/registration/app/cspm/cspm_accounts']
 
 var applicationPermissions = [
   { name: 'Application.Read.All', id: '9a5d68dd-52b0-4cc2-bd40-abcf44ac3a30', type: 'Role' }
-  //{ name: 'Application.ReadWrite.OwnedBy', id: '18a4783c-866b-4cc7-a460-3d5e5662c884', type: 'Role' }
   { name: 'AuditLog.Read.All', id: 'b0afded3-3588-46d8-8b3d-9842eff778da', type: 'Role' }
   { name: 'DeviceManagementRBAC.Read.All', id: '49f0cc30-024c-4dfd-ab3e-82e137ee5431', type: 'Scope' }
   { name: 'Directory.Read.All', id: '7ab1d382-f21e-4acd-a863-ba3e13f7da61', type: 'Role' }
@@ -28,7 +32,7 @@ var applicationPermissions = [
 ]
 
 /* Resources */
-resource microsoftGraphServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' existing = {
+resource msGraphServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' existing = {
   appId: '00000003-0000-0000-c000-000000000000'
 }
 
@@ -36,17 +40,19 @@ resource microsoftGraphServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0'
 resource application 'Microsoft.Graph/applications@v1.0' = {
   description: applicationDescription
   displayName: applicationName
-  keyCredentials: [
-    {
-      key: publicCertificate
-      type: 'AsymmetricX509Cert'
-      usage: 'Verify'
-    }
-  ]
+  keyCredentials: (!empty(publicCertificate))
+    ? [
+        {
+          key: publicCertificate
+          type: 'AsymmetricX509Cert'
+          usage: 'Verify'
+        }
+      ]
+    : []
   requiredResourceAccess: [
     {
       resourceAccess: [for permission in applicationPermissions: { id: permission.id, type: permission.type }]
-      resourceAppId: microsoftGraphServicePrincipal.appId
+      resourceAppId: msGraphServicePrincipal.appId
     }
   ]
   uniqueName: applicationName
@@ -62,18 +68,18 @@ resource servicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
 
 /* Grant consent to Application permissions */
 resource applicationPermissionGrant 'Microsoft.Graph/appRoleAssignedTo@v1.0' = [
-  for permission in applicationPermissions: if (permission.type == 'Role') {
-    principalId: servicePrincipal.id
-    resourceId: microsoftGraphServicePrincipal.id
+  for permission in applicationPermissions: if (permission.type == 'Role' && grantAdminConsent) {
     appRoleId: permission.id
+    principalId: servicePrincipal.id
+    resourceId: msGraphServicePrincipal.id
   }
 ]
 
 /* Grant consent to Delegated permissions */
-resource delegatedPermissionGrant 'Microsoft.Graph/oauth2PermissionGrants@v1.0' = {
+resource delegatedPermissionGrant 'Microsoft.Graph/oauth2PermissionGrants@v1.0' = if (grantAdminConsent) {
   clientId: servicePrincipal.id
   consentType: 'AllPrincipals'
-  resourceId: microsoftGraphServicePrincipal.id
+  resourceId: msGraphServicePrincipal.id
   scope: join(
     map(filter(applicationPermissions, permissions => permissions.type == 'Scope'), permission => permission.name),
     ' '
@@ -81,4 +87,5 @@ resource delegatedPermissionGrant 'Microsoft.Graph/oauth2PermissionGrants@v1.0' 
 }
 
 output applicationId string = application.appId
-output principalId string = application.id
+output applicationPrincipalId string = application.id
+output servicePrincipalId string = servicePrincipal.id

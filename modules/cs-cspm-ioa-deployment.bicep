@@ -24,7 +24,7 @@ param resourceGroupName string = 'cs-ioa-group' // DO NOT CHANGE - used for regi
 param tags object = {
   'cstag-vendor': 'crowdstrike'
   'cstag-product': 'fcs'
-  'cstag-purpose': 'ioa'
+  'cstag-purpose': 'cspm'
 }
 
 @description('The CID for the Falcon API.')
@@ -99,7 +99,7 @@ param entraLogSettings object = {
 
 /* Variables */
 var eventHubNamespaceName = 'cs-horizon-ns-${subscriptionId}' // DO NOT CHANGE - used for registration validation
-var keyVaultName = 'cs-kv-${randomSuffix}'
+var keyVaultName = 'cs-kv-${uniqueString(subscriptionId)}'
 var virtualNetworkName = 'cs-vnet'
 var networkSecurityGroupName = 'cs-nsg'
 var scope = az.resourceGroup(resourceGroup.name)
@@ -348,7 +348,7 @@ resource activityDiagnosticSetttings 'Microsoft.Insights/diagnosticSettings@2021
   name: activityLogSettings.diagnosticSetttingsName
   properties: {
     eventHubAuthorizationRuleId: eventHub.outputs.eventHubAuthorizationRuleId
-    eventHubName: activityLogSettings.eventHubName
+    eventHubName: eventHub.outputs.activityLogEventHubName
     logs: [
       {
         category: 'Administrative'
@@ -386,71 +386,12 @@ resource activityDiagnosticSetttings 'Microsoft.Insights/diagnosticSettings@2021
   }
 }
 
-/* 
-  Deploy Diagnostic Settings for Microsoft Entra ID Logs
-
-  Collect Microsoft Entra ID logs and submit them to CrowdStrike for analysis of Indicators of Attack (IOA)
-
-  Note:
-   - To export SignInLogs a P1 or P2 Microsoft Entra ID license is required
-   - 'Security Administrator' or 'Global Administrator' Entra ID permissions are required
-*/
-resource entraDiagnosticSetttings 'microsoft.aadiam/diagnosticSettings@2017-04-01' = if (deployEntraLogDiagnosticSettings) {
-  name: entraLogSettings.diagnosticSetttingsName
-  scope: tenant()
-  properties: {
+module entraDiagnosticSetttings 'ioa/entraLog.bicep' = if (deployEntraLogDiagnosticSettings) {
+  name: '${deploymentNamePrefix}-entraDiagnosticSetttings-${deploymentNameSuffix}'
+  params: {
+    diagnosticSetttingsName: entraLogSettings.diagnosticSetttingsName
+    eventHubName: eventHub.outputs.entraLogEventHubName
     eventHubAuthorizationRuleId: eventHub.outputs.eventHubAuthorizationRuleId
-    eventHubName: activityLogSettings.eventHubName
-    logs: [
-      {
-        category: 'AuditLogs'
-        enabled: true
-        retentionPolicy: {
-          days: 0
-          enabled: false
-        }
-      }
-      {
-        category: 'SignInLogs'
-        enabled: true
-        retentionPolicy: {
-          days: 0
-          enabled: false
-        }
-      }
-      {
-        category: 'NonInteractiveUserSignInLogs'
-        enabled: true
-        retentionPolicy: {
-          days: 0
-          enabled: false
-        }
-      }
-      {
-        category: 'ServicePrincipalSignInLogs'
-        enabled: true
-        retentionPolicy: {
-          days: 0
-          enabled: false
-        }
-      }
-      {
-        category: 'ManagedIdentitySignInLogs'
-        enabled: true
-        retentionPolicy: {
-          days: 0
-          enabled: false
-        }
-      }
-      {
-        category: 'ADFSSignInLogs'
-        enabled: true
-        retentionPolicy: {
-          days: 0
-          enabled: false
-        }
-      }
-    ]
   }
 }
 

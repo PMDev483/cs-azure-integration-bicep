@@ -1,4 +1,4 @@
-targetScope = 'managementGroup'
+targetScope = 'subscription'
 
 @description('Principal Id of the Application Registration in Entra ID.')
 param azurePrincipalId string
@@ -16,7 +16,7 @@ var roleDefinitionIds = [
 
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   for roleDefinitionId in roleDefinitionIds: {
-    name: guid(azurePrincipalId, roleDefinitionId, managementGroup().id)
+    name: guid(azurePrincipalId, roleDefinitionId, subscription().id)
     properties: {
       roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionId)
       principalId: azurePrincipalId

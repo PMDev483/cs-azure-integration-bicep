@@ -82,22 +82,17 @@ resource csIOAPolicyRoleAssignment 'Microsoft.Authorization/roleAssignments@2022
   }
 ]
 
-/*
-// Remediation task for the policy assignment
-resource remediateTask 'Microsoft.PolicyInsights/remediations@2021-10-01' = {
-  name: guid('Remediate', policyDefinition.id, managementGroup().id)
+/* Create remediation task for the IOA policy assignment */
+resource csIOAPolicyRemediation 'Microsoft.PolicyInsights/remediations@2021-10-01' = {
+  name: guid('Remediate', csIOAPolicyDefinition.id, managementGroup().id)
   properties: {
     failureThreshold: {
       percentage: 1
     }
     resourceCount: 500
-    policyAssignmentId: policyAssignment.id
-    policyDefinitionReferenceId: policyDefinition.id
+    policyAssignmentId: csIOAPolicyAssignment.id
+    policyDefinitionReferenceId: csIOAPolicyDefinition.id
     parallelDeployments: 10
-    resourceDiscoveryMode: 'ReEvaluateNonCompliant'
+    resourceDiscoveryMode: 'ExistingNonCompliant'
   }
-  dependsOn: [
-    roleAssignment
-  ]
 }
-*/

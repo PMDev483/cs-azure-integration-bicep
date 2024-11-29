@@ -16,7 +16,10 @@ param(
     [string]$AzureSubscriptionId,
 
     [Parameter(Mandatory = $false)]
-    [int]$AzureYearsValid = 1
+    [int]$AzureYearsValid = 1,
+
+    [Parameter(Mandatory = $true)]
+    [string]$UseExistingAppRegistration
 )
 
 function Set-AzureAppRegistrationCertificate {
@@ -71,6 +74,8 @@ function Set-AzureAppRegistrationCertificate {
 }
 
 try {
+    $DeploymentScriptOutputs = @{}
+
     # Check if the PSFalcon module is available
     if (!(Get-Module -Name PSFalcon)) {
         if (!(Get-Module -ListAvailable -Name PSFalcon)) {
@@ -93,9 +98,12 @@ try {
     # Get Falcon Azure Application certificate
     $azurePublicCertificate = (Get-FalconCloudAzureCertificate -TenantId $AzureTenantId).public_certificate
 
-    # Add certificate to Azure Application Registration
-    Set-AzureAppRegistrationCertificate -TenantId $AzureTenantId -SubscriptionId $AzureSubscriptionId -ClientId ${Env:AZURE_CLIENT_ID} -ClientSecret ${Env:AZURE_CLIENT_SECRET} -ClientCertificate $azurePublicCertificate
+    # Add certificate to existing Azure Application Registration
+    if([System.Convert]::ToBoolean($UseExistingAppRegistration)) {
+        Set-AzureAppRegistrationCertificate -TenantId $AzureTenantId -SubscriptionId $AzureSubscriptionId -ClientId ${Env:AZURE_CLIENT_ID} -ClientSecret ${Env:AZURE_CLIENT_SECRET} -ClientCertificate $azurePublicCertificate
+    }
     
+    $DeploymentScriptOutputs['public_certificate'] = $azurePublicCertificate
 }
 catch {
     Write-Error "An exception was caught: $($_.Exception.Message)"
