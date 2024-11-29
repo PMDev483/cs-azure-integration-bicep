@@ -51,14 +51,14 @@ param useExistingAppRegistration bool = false
 @description('Grant admin consent for Application Registration. Defaults to true.')
 param grantAppRegistrationAdminConsent bool = true
 
-@description('Application Id of an existing Application Registration in Entra ID.')
+@description('Application Id of an existing Application Registration in Entra ID. Only used with parameter useExistingAppRegistration.')
 param azureClientId string = ''
 
-@description('Application Secret of an existing Application Registration in Entra ID.')
+@description('Application Secret of an existing Application Registration in Entra ID. Only used with parameter useExistingAppRegistration.')
 @secure()
 param azureClientSecret string = ''
 
-@description('Principal Id of the Application Registration in Entra ID.')
+@description('Principal Id of the Application Registration in Entra ID. Only used with parameter useExistingAppRegistration.')
 param azurePrincipalId string = ''
 
 @description('Type of the Azure account to integrate. Defaults to commercial, allowed values are commercial or gov.')
@@ -79,27 +79,27 @@ param tags object = {
 }
 
 /* IOM-specific parameter */
-@description('Deploy Indicator of Misconfiguration (IOM) integration.')
+@description('Deploy Indicator of Misconfiguration (IOM) integration. Defaults to true.')
 param deployIOM bool = true
 
-@description('Assign required permissions on Azure Default Subscription automatically.')
+@description('Assign required permissions on Azure Default Subscription automatically. Defaults to false.')
 param assignAzureSubscriptionPermissions bool = false
 
-@description('Assign required permissions Azure Management Group automatically.')
+@description('Assign required permissions Azure Management Group automatically. Defaults to true.')
 param assignAzureManagementGroupPermissions bool = true
 
 /* IOA-specific parameter */
-@description('Deploy Indicator of Attack (IOA) integration.')
+@description('Deploy Indicator of Attack (IOA) integration. Defaults to true.')
 param deployIOA bool = true
 
-@description('Enable Application Insights for additional logging of Function Apps.')
+@description('Enable Application Insights for additional logging of Function Apps. Defaults to false.')
 #disable-next-line no-unused-params
 param enableAppInsights bool = false
 
-@description('Deploy Activity Log Diagnostic Settings')
+@description('Deploy Activity Log Diagnostic Settings. Defaults to true.')
 param deployActivityLogDiagnosticSettings bool = true
 
-@description('Deploy Entra Log Diagnostic Settings')
+@description('Deploy Entra Log Diagnostic Settings. Defaults to true.')
 param deployEntraLogDiagnosticSettings bool = true
 
 /* Resources */
