@@ -26,6 +26,7 @@ az deployment sub create --name 'cs-cspm-appregistration' --location westeurope 
 #### Parameters
 
 | Parameter name | Required | Description |
+| --- | --- | --- |
 | applicationName | no | Name of the App registration in Entra ID. Defaults to **CrowdStrikeCSPM-${uniqueString}**, e.g. **CrowdStrikeCSPM-2452hzjqllbqm** |
 | publicCertificate | no | Base64-encoded string of the public certificate raw data. Default is **empty**. This certificate is used to connect from the Falcon platform to Azure. |
 | grantAdminConsent | no | Provide admin consent to Microsoft Graph API permissions automatically. Defaults to **true**. Requires ***Privileged Role Administrator*** or ***Global Administrator*** permissions in Entra ID. |
