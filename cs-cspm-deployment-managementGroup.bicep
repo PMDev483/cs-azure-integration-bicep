@@ -148,7 +148,7 @@ module ioaAzureSubscription 'modules/cs-cspm-ioa-deployment.bicep' = if (deployI
   }
 }
 
-module ioaAzurePolicyAssignment 'modules/ioa/activityLog.bicep' = if (deployIOA && targetScope == 'ManagementGroup' && deployActivityLogDiagnosticSettings) {
+module ioaAzurePolicyAssignment 'modules/ioa/activityLogPolicy.bicep' = if (deployIOA && targetScope == 'ManagementGroup' && deployActivityLogDiagnosticSettings) {
   name: '${deploymentNamePrefix}-ioa-azurePolicyAssignment-${deploymentNameSuffix}'
   scope: managementGroup()
   params: {
