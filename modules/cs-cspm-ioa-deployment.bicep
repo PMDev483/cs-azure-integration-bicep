@@ -55,7 +55,9 @@ param deployActivityLogDiagnosticSettings bool = true
 @description('Enable Entra ID Log diagnostic settings deployment. Requires at least Security Administrator permissions')
 param deployEntraLogDiagnosticSettings bool = true
 
-param randomSuffix string = uniqueString(resourceGroupName, subscription().subscriptionId)
+param randomSuffix string = uniqueString(resourceGroupName, defaultSubscriptionId)
+
+param defaultSubscriptionId string = subscription().subscriptionId // DO NOT CHANGE - used for registration validation
 
 param subscriptionId string = subscription().subscriptionId
 
@@ -70,8 +72,8 @@ param csLogSettings object = {
 /* ParameterBag for Activity Logs */
 param activityLogSettings object = {
   hostingPlanName: 'cs-activity-service-plan'
-  functionAppName: 'cs-activity-func-${subscriptionId}' // DO NOT CHANGE - used for registration validation
-  functionAppIdentityName: 'cs-activity-func-${subscriptionId}' // DO NOT CHANGE - used for registration validation
+  functionAppName: 'cs-activity-func-${defaultSubscriptionId}' // DO NOT CHANGE - used for registration validation
+  functionAppIdentityName: 'cs-activity-func-${defaultSubscriptionId}' // DO NOT CHANGE - used for registration validation
   functionAppDiagnosticSettingName: 'cs-activity-func-to-storage'
   ioaPackageURL: 'https://cs-prod-cloudconnect-templates.s3-us-west-1.amazonaws.com/azure/4.x/ioa.zip'
   storageAccountName: substring('cshorizonact${randomSuffix}', 0, 24)
@@ -85,8 +87,8 @@ param activityLogSettings object = {
 /* ParameterBag for EntraId Logs */
 param entraLogSettings object = {
   hostingPlanName: 'cs-aad-service-plan'
-  functionAppName: 'cs-aad-func-${subscriptionId}' // DO NOT CHANGE - used for registration validation
-  functionAppIdentityName: 'cs-aad-func-${subscriptionId}' // DO NOT CHANGE - used for registration validation
+  functionAppName: 'cs-aad-func-${defaultSubscriptionId}' // DO NOT CHANGE - used for registration validation
+  functionAppIdentityName: 'cs-aad-func-${defaultSubscriptionId}' // DO NOT CHANGE - used for registration validation
   functionAppDiagnosticSettingName: 'cs-aad-func-to-storage'
   ioaPackageURL: 'https://cs-prod-cloudconnect-templates.s3-us-west-1.amazonaws.com/azure/4.x/ioa.zip'
   storageAccountName: substring('cshorizonaad${randomSuffix}', 0, 24)
@@ -98,8 +100,8 @@ param entraLogSettings object = {
 }
 
 /* Variables */
-var eventHubNamespaceName = 'cs-horizon-ns-${subscriptionId}' // DO NOT CHANGE - used for registration validation
-var keyVaultName = 'cs-kv-${uniqueString(subscriptionId)}'
+var eventHubNamespaceName = 'cs-horizon-ns-${defaultSubscriptionId}' // DO NOT CHANGE - used for registration validation
+var keyVaultName = 'cs-kv-${uniqueString(defaultSubscriptionId)}'
 var virtualNetworkName = 'cs-vnet'
 var networkSecurityGroupName = 'cs-nsg'
 var scope = az.resourceGroup(resourceGroup.name)
@@ -336,53 +338,13 @@ module entraLogFunction 'ioa/functionApp.bicep' = {
   ]
 }
 
-/* 
-  Deploy Diagnostic Settings for Azure Activity Logs - current Azure subscription
-
-  Collect Azure Activity Logs and submit them to CrowdStrike for analysis of Indicators of Attack (IOA)
-
-  Note:
-   - 'Contributor' permissions are required to create Azure Activity Logs diagnostic settings
-*/
-resource activityDiagnosticSetttings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = if (deployActivityLogDiagnosticSettings) {
-  name: activityLogSettings.diagnosticSetttingsName
-  properties: {
-    eventHubAuthorizationRuleId: eventHub.outputs.eventHubAuthorizationRuleId
-    eventHubName: eventHub.outputs.activityLogEventHubName
-    logs: [
-      {
-        category: 'Administrative'
-        enabled: true
-      }
-      {
-        category: 'Security'
-        enabled: true
-      }
-      {
-        category: 'ServiceHealth'
-        enabled: true
-      }
-      {
-        category: 'Alert'
-        enabled: true
-      }
-      {
-        category: 'Recommendation'
-        enabled: true
-      }
-      {
-        category: 'Policy'
-        enabled: true
-      }
-      {
-        category: 'Autoscale'
-        enabled: true
-      }
-      {
-        category: 'ResourceHealth'
-        enabled: true
-      }
-    ]
+module activityDiagnosticSettings 'ioa/activityLog.bicep' = if (deployActivityLogDiagnosticSettings) {
+  name:  '${deploymentNamePrefix}-activityLog-${deploymentNameSuffix}'
+  scope: subscription(subscriptionId)
+  params: {
+      diagnosticSettingsName: activityLogSettings.diagnosticSetttingsName
+      eventHubAuthorizationRuleId: eventHub.outputs.eventHubAuthorizationRuleId
+      eventHubName: eventHub.outputs.activityLogEventHubName
   }
 }
 
