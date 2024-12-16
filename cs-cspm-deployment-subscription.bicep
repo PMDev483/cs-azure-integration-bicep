@@ -31,7 +31,7 @@ param falconCID string
 param falconClientId string
 
 @description('Subscription Id of the default Azure Subscription.')
-param defaultSubscriptionId string = subscription().subscriptionId
+param defaultSubscriptionId string
 
 @description('Client secret for the Falcon API.')
 @secure()
@@ -128,6 +128,7 @@ module ioaAzureSubscription 'modules/cs-cspm-ioa-deployment.bicep' = if (deployI
     falconCID: falconCID
     falconClientId: falconClientId
     falconClientSecret: falconClientSecret
+    defaultSubscriptionId: defaultSubscriptionId
     subscriptionId: subscription().subscriptionId
     falconCloudRegion: falconCloudRegion
     enableAppInsights: enableAppInsights
