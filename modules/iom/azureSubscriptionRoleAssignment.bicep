@@ -6,12 +6,6 @@ param azurePrincipalId string
 @description('Type of the Principal. Defaults to ServicePrincipal.')
 param azurePrincipalType string = 'ServicePrincipal'
 
-@description('The prefix to be added to the deployment name.')
-param deploymentNamePrefix string = 'cs-cspm-iom'
-
-@description('The suffix to be added to the deployment name.')
-param deploymentNameSuffix string = utcNow()
-
 param roleName string = 'cs-website-reader'
 param roleDescription string = 'Crowdstrike Web App Service Custom Role'
 param roleType string = 'CustomRole'
