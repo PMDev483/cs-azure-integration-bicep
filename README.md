@@ -42,7 +42,10 @@ The command below registers a single Azure Subscription into CrowdStrike Falcon 
   - *Security Reader*
   - *Key Vault Reader*
   - *Azure Kubernetes Service RBAC Reader*
-  - *Website Contributor*
+- Assigns the *cs-website-reader* custom role on the Subscription with the following actions
+  - *Microsoft.Web/sites/Read*
+  - *Microsoft.Web/sites/config/Read*
+  - *Microsoft.Web/sites/config/list/Action*
 - Deploys infrastructure for Indicator of Attack (IOA) assessment
 - Integrates the Subscription into the CrowdStrike Falcon Cloud Security for Indicator of Misconfiguration (IOM) and Indicator of Attack (IOA) assessment
 
@@ -71,6 +74,7 @@ az deployment sub create --name 'cs-cspm-subscription-deployment' --location wes
 
 | Parameter name | Required | Description |
 | --- | --- | --- |
+| defaultSubscriptionId | yes | Subscription Id of the default Azure Subscription. |
 | falconCID | yes | CID for the Falcon API. |
 | falconClientId | yes | Client ID for the Falcon API. |
 | falconClientSecret | yes | Client secret for the Falcon API. |
@@ -100,6 +104,10 @@ The command below registers an Azure management group, including all Azure subsc
   - *Key Vault Reader*
   - *Azure Kubernetes Service RBAC Reader*
   - *Website Contributor*
+- Assigns the *cs-website-reader* custom role on the Subscription with the following actions
+  - *Microsoft.Web/sites/Read*
+  - *Microsoft.Web/sites/config/Read*
+  - *Microsoft.Web/sites/config/list/Action*
 - Creates and Azure Policy definition and management group assignment to create Azure subscription diagnostic settings
 - Creates Microsoft Entra ID diagnostic setting
 - Deploys infrastructure for Indicator of Attack (IOA) assessment
@@ -124,6 +132,7 @@ The command below registers an Azure management group, including all Azure subsc
 ```sh
 az deployment mg create --name 'cs-cspm-managementgroup-deployment' --location westeurope \
   --management-group-id $(az account show --query tenantId -o tsv) \
+  --template-file cs-cspm-deployment-managementGroup.bicep \
   --only-show-errors
 ```
 
@@ -156,7 +165,7 @@ az deployment mg create --name 'cs-cspm-managementgroup-deployment' --location w
 
 ### Using existing app registration in Entra ID
 > [!IMPORTANT]
-> To use an existing app registraiton Application.ReadWrite.OwnedBy.
+> To use an existing app registration Application.ReadWrite.OwnedBy.
 
 ## Contributing
 
