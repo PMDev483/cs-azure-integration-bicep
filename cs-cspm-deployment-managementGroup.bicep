@@ -134,13 +134,14 @@ module iomAzureManagementGroup 'modules/iom/azureManagementGroupRoleAssignment.b
 
 module ioaAzureSubscription 'modules/cs-cspm-ioa-deployment.bicep' = if (deployIOA && targetScope == 'ManagementGroup') {
   name: '${deploymentNamePrefix}-ioa-azureSubscription-${deploymentNameSuffix}'
-  scope: subscription(defaultSubscriptionId)
+  scope: subscription(defaultSubscriptionId) // DO NOT CHANGE
   params:{
     falconCID: falconCID
     falconClientId: falconClientId
     falconClientSecret: falconClientSecret
     falconCloudRegion: falconCloudRegion
     enableAppInsights: enableAppInsights
+    defaultSubscriptionId: defaultSubscriptionId // DO NOT CHANGE
     deployActivityLogDiagnosticSettings: deployActivityLogDiagnosticSettings
     deployEntraLogDiagnosticSettings: deployEntraLogDiagnosticSettings
     location: location

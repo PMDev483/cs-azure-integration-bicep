@@ -57,7 +57,7 @@ param deployEntraLogDiagnosticSettings bool = true
 
 param randomSuffix string = uniqueString(resourceGroupName, defaultSubscriptionId)
 
-param defaultSubscriptionId string = subscription().subscriptionId // DO NOT CHANGE - used for registration validation
+param defaultSubscriptionId string // DO NOT CHANGE - used for registration validation
 
 param subscriptionId string = subscription().subscriptionId
 
