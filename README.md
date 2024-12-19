@@ -25,6 +25,10 @@ az deployment sub create --name 'cs-cspm-appregistration' --location westeurope 
 
 #### Parameters
 
+- You can generate a parameter file: [generate-params](https://learn.microsoft.com/fr-fr/azure/azure-resource-manager/bicep/bicep-cli#generate-params)
+- Deploy the bicep file using the parameters file: [deploy bicep file with parameters file](https://learn.microsoft.com/fr-fr/azure/azure-resource-manager/bicep/parameter-files?tabs=Bicep#deploy-bicep-file-with-parameters-file)
+- Or pass the parameters as arguments: [inline-parameters](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-cli#inline-parameters)
+
 | Parameter name | Required | Description |
 | --- | --- | --- |
 | applicationName | no | Name of the App registration in Entra ID. Defaults to **CrowdStrikeCSPM-${uniqueString}**, e.g. **CrowdStrikeCSPM-2452hzjqllbqm** |
@@ -87,6 +91,10 @@ Click the `cs-ioa-assignment` assignment and then remediate the assignment by [c
 Click **Validate** below to return to the cloud accounts page. Please allow about two hours for the data to be available.
 
 #### Parameters
+
+- You can generate a parameter file: [generate-params](https://learn.microsoft.com/fr-fr/azure/azure-resource-manager/bicep/bicep-cli#generate-params)
+- Deploy the bicep file using the parameters file: [deploy bicep file with parameters file](https://learn.microsoft.com/fr-fr/azure/azure-resource-manager/bicep/parameter-files?tabs=Bicep#deploy-bicep-file-with-parameters-file)
+- Or pass the parameters as arguments: [inline-parameters](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-cli#inline-parameters)
 
 | Parameter name | Required | Description |
 | --- | --- | --- |
@@ -152,6 +160,10 @@ az deployment sub create --name 'cs-cspm-subscription-deployment' --location wes
 
 #### Parameters
 
+- You can generate a parameter file: [generate-params](https://learn.microsoft.com/fr-fr/azure/azure-resource-manager/bicep/bicep-cli#generate-params)
+- Deploy the bicep file using the parameters file: [deploy bicep file with parameters file](https://learn.microsoft.com/fr-fr/azure/azure-resource-manager/bicep/parameter-files?tabs=Bicep#deploy-bicep-file-with-parameters-file)
+- Or pass the parameters as arguments: [inline-parameters](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-cli#inline-parameters)
+
 | Parameter name | Required | Description |
 | --- | --- | --- |
 | defaultSubscriptionId | yes | Subscription Id of the default Azure Subscription. |
@@ -173,12 +185,6 @@ az deployment sub create --name 'cs-cspm-subscription-deployment' --location wes
 | enableAppInsights | no | Enable Application Insights for additional logging of Function Apps. Defaults to ***false***. |
 | deployActivityLogDiagnosticSettings | no | Deploy Activity Log Diagnostic Settings. Defaults to ***true***. |
 | deployEntraLogDiagnosticSettings | no | Deploy Entra Log Diagnostic Settings. Defaults to ***true***. |
-
-## Examples
-
-### Using existing app registration in Entra ID
-> [!IMPORTANT]
-> To use an existing app registration Application.ReadWrite.OwnedBy.
 
 ## Contributing
 
