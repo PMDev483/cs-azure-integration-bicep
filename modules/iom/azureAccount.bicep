@@ -1,4 +1,6 @@
 /*
+  This Bicep template registers the Azure account(s) in the targeted Falcon environment
+
   Copyright (c) 2024 CrowdStrike, Inc.
 */
 
@@ -35,10 +37,9 @@ param azureClientId string
 @secure()
 param azureClientSecret string = ''
 
-@description('Type of the Azure account to integrate. Defaults to commercial, allowed values are commercial or gov.')
+@description('Type of the Azure account to integrate.')
 @allowed([
   'commercial'
-  'gov'
 ])
 param azureAccountType string = 'commercial'
 

@@ -61,10 +61,9 @@ param azureClientSecret string = ''
 @description('Principal Id of the Application Registration in Entra ID. Only used with parameter useExistingAppRegistration.')
 param azurePrincipalId string = ''
 
-@description('Type of the Azure account to integrate. Defaults to commercial, allowed values are commercial or gov.')
+@description('Type of the Azure account to integrate.')
 @allowed([
   'commercial'
-  'gov'
 ])
 param azureAccountType string = 'commercial'
 

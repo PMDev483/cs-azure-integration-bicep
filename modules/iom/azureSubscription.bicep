@@ -2,6 +2,12 @@ targetScope = 'subscription'
 
 extension microsoftGraphV1
 
+/*
+  This Bicep template deploys infrastructure to enable CrowdStrike
+  Indicator of Misconfiguration (IOM)
+  Copyright (c) 2024 CrowdStrike, Inc.
+*/
+
 @description('Targetscope of the IOM integration.')
 @allowed([
   'ManagementGroup'
