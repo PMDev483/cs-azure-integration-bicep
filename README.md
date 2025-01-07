@@ -57,6 +57,14 @@ The command below registers an Azure management group, including all Azure subsc
 > [!IMPORTANT]
 > Registration only supports the Azure root management group (Tenant root group).
 
+#### Prerequisite
+
+Ensure you have a CrowdStrike API client ID and client secret for FCS. If you don't, you can set them up on Falcon:
+
+- [US-1](https://falcon.crowdstrike.com/api-clients-and-keys/)
+- [US-2](https://falcon.us-2.crowdstrike.com/api-clients-and-keys/)
+- [EU](https://falcon.eu-1.crowdstrike.com/api-clients-and-keys/clients)
+
 #### Required permissions
 
 - ***Application Developer***, ***Cloud Application Administrator*** or ***Application Administrator*** role in Microsoft Entra ID - to create the app registration in Microsoft Entra ID
@@ -136,6 +144,14 @@ The command below registers a single Azure Subscription into CrowdStrike Falcon 
   - *Microsoft.Web/sites/config/list/Action*
 - Deploys infrastructure for Indicator of Attack (IOA) assessment
 - Integrates the Subscription into the CrowdStrike Falcon Cloud Security for Indicator of Misconfiguration (IOM) and Indicator of Attack (IOA) assessment
+
+#### Prerequisite
+
+Ensure you have a CrowdStrike API client ID and client secret for FCS. If you don't, you can set them up on Falcon:
+
+- [US-1](https://falcon.crowdstrike.com/api-clients-and-keys/)
+- [US-2](https://falcon.us-2.crowdstrike.com/api-clients-and-keys/)
+- [EU](https://falcon.eu-1.crowdstrike.com/api-clients-and-keys/clients)
 
 #### Required permissions
 
