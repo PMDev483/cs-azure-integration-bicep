@@ -13,9 +13,15 @@ param azurePrincipalId string
 @description('Type of the Principal. Defaults to ServicePrincipal.')
 param azurePrincipalType string = 'ServicePrincipal'
 
-param roleName string = 'cs-website-reader'
-param roleDescription string = 'Crowdstrike Web App Service Custom Role'
-param roleType string = 'CustomRole'
+param customRole object = {
+  roleName: 'CrowdStrike Website Reader'
+  roleDescription: 'CrowdStrike custom role to allow read access to App Service and Function.'
+  roleActions: [
+    'Microsoft.Web/sites/Read'
+    'Microsoft.Web/sites/config/Read'
+    'Microsoft.Web/sites/config/list/Action'
+  ]
+}
 
 var roleDefinitionIds = [
   'acdd72a7-3385-48ef-bd42-f606fba81ae7' // Reader
@@ -24,25 +30,19 @@ var roleDefinitionIds = [
   '7f6c6a51-bcf8-42ba-9220-52d62157d7db' // Azure Kubernetes Service RBAC Reader
 ]
 
-var roleActions = [
-    'Microsoft.Web/sites/Read'
-    'Microsoft.Web/sites/config/Read'
-    'Microsoft.Web/sites/config/list/Action'
-    ]
-
-resource WebsiteReaderRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
-  name: roleName
+resource customRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
+  name: guid(customRole.roleName, managementGroup().id)
   properties: {
     assignableScopes: [managementGroup().id]
-    description: roleDescription
+    description: customRole.roleDescription
     permissions: [
       {
-        actions: roleActions
+        actions: customRole.roleActions
         notActions: []
       }
     ]
-    roleName: roleName
-    type: roleType
+    roleName: customRole.roleName
+    type: 'CustomRole'
   }
 }
 
@@ -58,10 +58,14 @@ resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
 ]
 
 resource customRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-    name: guid(azurePrincipalId, resourceId('Microsoft.Authorization/roleDefinitions', guid(managementGroup().id, WebsiteReaderRoleDefinition.name)), subscription().id)
-    properties: {
-      roleDefinitionId:  resourceId('Microsoft.Authorization/roleDefinitions', guid(managementGroup().id, WebsiteReaderRoleDefinition.name))
-      principalId: azurePrincipalId
-      principalType: azurePrincipalType
-    }
+  name: guid(
+    azurePrincipalId,
+    customRoleDefinition.id,
+    managementGroup().id
+  )
+  properties: {
+    roleDefinitionId: customRoleDefinition.id
+    principalId: azurePrincipalId
+    principalType: azurePrincipalType
+  }
 }
