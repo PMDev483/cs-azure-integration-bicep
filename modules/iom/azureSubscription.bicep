@@ -58,7 +58,7 @@ param azurePrincipalId string = ''
 @description('Type of the Principal, defaults to ServicePrincipal.')
 param azurePrincipalType string = 'ServicePrincipal'
 
-@description('Type of the Azure account to integrate. Commercial or Government.')
+@description('Type of the Azure account to integrate.')
 param azureAccountType string = 'commercial'
 
 @description('Assign required permissions automatically.')

@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory = $false)]
-    [ValidateSet("commercial", "gov")]
+    [ValidateSet("commercial")]
     [string]$AzureAccountType = "commercial",
 
     [Parameter(Mandatory = $true)]
