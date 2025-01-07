@@ -1,5 +1,5 @@
 /*
-  This Bicep template registers the Azure account(s) in the targeted Falcon environment
+  This Bicep template registers the Azure account(s) into the targeted Falcon environment
 
   Copyright (c) 2024 CrowdStrike, Inc.
 */
