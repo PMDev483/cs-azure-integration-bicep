@@ -2,6 +2,12 @@ targetScope = 'subscription'
 
 extension microsoftGraphV1
 
+/*
+  This Bicep template deploys infrastructure to enable CrowdStrike
+  Indicator of Misconfiguration (IOM)
+  Copyright (c) 2024 CrowdStrike, Inc.
+*/
+
 @description('Targetscope of the IOM integration.')
 @allowed([
   'ManagementGroup'
@@ -52,7 +58,7 @@ param azurePrincipalId string = ''
 @description('Type of the Principal, defaults to ServicePrincipal.')
 param azurePrincipalType string = 'ServicePrincipal'
 
-@description('Type of the Azure account to integrate. Commercial or Government.')
+@description('Type of the Azure account to integrate.')
 param azureAccountType string = 'commercial'
 
 @description('Assign required permissions automatically.')

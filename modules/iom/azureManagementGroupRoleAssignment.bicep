@@ -1,5 +1,12 @@
 targetScope = 'managementGroup'
 
+/*
+  This Bicep template assigns the required permissions on Azure management group to enable CrowdStrike
+  Indicator of Misconfiguration (IOM)
+
+  Copyright (c) 2024 CrowdStrike, Inc.
+*/
+
 @description('Principal Id of the Application Registration in Entra ID.')
 param azurePrincipalId string
 

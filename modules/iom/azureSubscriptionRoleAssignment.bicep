@@ -1,5 +1,11 @@
 targetScope = 'subscription'
 
+/*
+  This Bicep template assigns the required permissions on Azure Subscription to enable CrowdStrike
+  Indicator of Misconfiguration (IOM)
+  Copyright (c) 2024 CrowdStrike, Inc.
+*/
+
 @description('Principal Id of the Application Registration in Entra ID.')
 param azurePrincipalId string
 

@@ -2,6 +2,13 @@ targetScope = 'subscription'
 
 extension microsoftGraphV1
 
+/*
+  This Bicep template creates the Application Registration and assigns the API permissions
+  needed for CrowdStrike Indicator of Misconfiguration (IOM)
+
+  Copyright (c) 2024 CrowdStrike, Inc.
+*/
+
 /* Parameters */
 @description('Name of the Application Registration.')
 param applicationName string = 'CrowdStrikeCSPM-${uniqueString(tenant().tenantId)}'
