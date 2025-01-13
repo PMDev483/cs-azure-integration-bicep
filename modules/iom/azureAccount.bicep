@@ -84,7 +84,7 @@ resource fcsAzureAccount 'Microsoft.Resources/deploymentScripts@2023-08-01' = {
       }
     ]
     arguments: '-AzureAccountType ${azureAccountType} -AzureTenantId ${tenant().tenantId} -AzureSubscriptionId ${subscription().subscriptionId} -TargetScope ${targetScope} -UseExistingAppRegistration ${useExistingAppRegistration}'
-    scriptContent: loadTextContent('../../scripts/New-FalconFcsAzureAccount.ps1')
+    scriptContent: loadTextContent('../../scripts/New-FcsAzureAccount.ps1')
     retentionInterval: 'PT1H'
     cleanupPreference: 'OnSuccess'
   }
