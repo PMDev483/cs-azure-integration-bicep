@@ -1,5 +1,5 @@
 ## CrowdStrike API Client Scopes required:
-## - Falcon Cloud Security Registration (read/write)
+## - CSPM Registration (read/write)
 
 param(
     [Parameter(Mandatory = $true)]
