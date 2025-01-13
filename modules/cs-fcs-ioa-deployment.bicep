@@ -24,7 +24,6 @@ param resourceGroupName string = 'cs-ioa-group' // DO NOT CHANGE - used for regi
 param tags object = {
   'cstag-vendor': 'crowdstrike'
   'cstag-product': 'fcs'
-  'cstag-purpose': 'fcs'
 }
 
 @description('The CID for the Falcon API.')

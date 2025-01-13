@@ -50,7 +50,6 @@ param location string = resourceGroup().location
 param tags object = {
   'cstag-vendor': 'crowdstrike'
   'cstag-product': 'fcs'
-  'cstag-purpose': 'fcs'
 }
 
 /* Resources */

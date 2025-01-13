@@ -71,7 +71,6 @@ param location string = deployment().location
 param tags object = {
   'cstag-vendor': 'crowdstrike'
   'cstag-product': 'fcs'
-  'cstag-purpose': 'fcs'
 }
 
 /* Create Azure Resource Group for IOM resources */
