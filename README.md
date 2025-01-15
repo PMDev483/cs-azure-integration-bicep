@@ -4,6 +4,13 @@
 
 The Azure Bicep templates in this repository allow for an easy and seamless integration of Azure environments into CrowdStrike Falcon Cloud Security.
 
+## Table of Contents
+1. [Register an Azure management group](#register-an-azure-management-group)
+2. [Register a single Azure Subscription](#register-a-single-azure-subscription)
+3. [Contributing](#contributing)
+4. [Support](#support)
+5. [License Information](#license-information)
+
 ## Deployment using Azure CLI
 
 ### Register an Azure management group
