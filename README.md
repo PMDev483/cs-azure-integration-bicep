@@ -7,9 +7,10 @@ The Azure Bicep templates in this repository allow for an easy and seamless inte
 ## Table of Contents
 1. [Register an Azure management group](#register-an-azure-management-group)
 2. [Register a single Azure Subscription](#register-a-single-azure-subscription)
-3. [Contributing](#contributing)
-4. [Support](#support)
-5. [License Information](#license-information)
+3. [Troubleshooting](#troubleshooting)
+4. [Contributing](#contributing)
+5. [Support](#support)
+6. [License Information](#license-information)
 
 ## Deployment using Azure CLI
 
