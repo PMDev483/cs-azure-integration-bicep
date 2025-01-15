@@ -181,6 +181,18 @@ You can use any of these methods to pass parameters:
 | `deployActivityLogDiagnosticSettings` | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                   |
 | `deployEntraLogDiagnosticSettings`    | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                      |
 
+### Troubleshooting
+
+#### Key Vault already existing
+
+When using our bicep files to set up Indicator Of Attacks, a Key Vault is created to store sensible information.
+
+As per Microsoft's recommendation, The Key Vault is created with [purge protection](https://learn.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview#purge-protection) enabled.
+
+When deleting the resource group _cs-ioa-group_, the Key Vault gets soft-deleted.
+
+If you encounter any issue while trying to create the Key Vault, please follow [Microsoft's instruction](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-recovery?tabs=azure-portal#list-recover-or-purge-a-soft-deleted-key-vault) on how to recover a soft-deleted Key Vault.
+
 ## Contributing
 
 If you want to develop new content or improve on this collection, please open an issue or create a pull request. All contributions are welcome!
