@@ -4,6 +4,14 @@
 
 The Azure Bicep templates in this repository allow for an easy and seamless integration of Azure environments into CrowdStrike Falcon Cloud Security.
 
+## Table of Contents
+1. [Register an Azure management group](#register-an-azure-management-group)
+2. [Register a single Azure Subscription](#register-a-single-azure-subscription)
+3. [Troubleshooting](#troubleshooting)
+4. [Contributing](#contributing)
+5. [Support](#support)
+6. [License Information](#license-information)
+
 ## Deployment using Azure CLI
 
 ### Register an Azure management group
@@ -50,7 +58,7 @@ Ensure you have a CrowdStrike API client ID and client secret for Falcon Cloud S
 #### Deployment command
 
 ```sh
-az deployment mg create --name 'cs-fcs-managementgroup-deployment' --location westeurope \
+az deployment mg create --name 'cs-fcs-managementgroup-deployment' --location westus \
   --management-group-id $(az account show --query tenantId -o tsv) \
   --template-file cs-fcs-deployment-managementGroup.bicep \
   --only-show-errors
@@ -136,7 +144,7 @@ Ensure you have a CrowdStrike API client ID and client secret for Falcon Cloud S
 #### Deployment command
 
 ```sh
-az deployment sub create --name 'cs-fcs-subscription-deployment' --location westeurope \
+az deployment sub create --name 'cs-fcs-subscription-deployment' --location westus \
   --template-file cs-fcs-deployment-subscription.bicep \
   --only-show-errors
 ```
@@ -173,6 +181,17 @@ You can use any of these methods to pass parameters:
 | `enableAppInsights`                   | no       | Enable Application Insights for additional logging of Function Apps. Defaults to `false`.                                      |
 | `deployActivityLogDiagnosticSettings` | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                   |
 | `deployEntraLogDiagnosticSettings`    | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                      |
+
+### Troubleshooting
+
+#### Key Vault already existing
+
+When using our bicep files to set up Indicator Of Attack, a Key Vault is created to store sensible information.
+As per Microsoft's recommendation, the Key Vault is created with [purge protection](https://learn.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview#purge-protection) enabled.
+
+When deleting the resource group _cs-ioa-group_, the Key Vault gets soft-deleted.
+
+If you encounter any issues while trying to create the Key Vault, please follow [Microsoft's instruction](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-recovery?tabs=azure-portal#list-recover-or-purge-a-soft-deleted-key-vault) on how to recover a soft-deleted Key Vault.
 
 ## Contributing
 
