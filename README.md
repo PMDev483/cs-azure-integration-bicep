@@ -190,7 +190,7 @@ As per Microsoft's recommendation, the Key Vault is created with [purge protecti
 
 When deleting the resource group _cs-ioa-group_, the Key Vault gets soft-deleted.
 
-If you encounter any issue while trying to create the Key Vault, please follow [Microsoft's instruction](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-recovery?tabs=azure-portal#list-recover-or-purge-a-soft-deleted-key-vault) on how to recover a soft-deleted Key Vault.
+If you encounter any issues while trying to create the Key Vault, please follow [Microsoft's instruction](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-recovery?tabs=azure-portal#list-recover-or-purge-a-soft-deleted-key-vault) on how to recover a soft-deleted Key Vault.
 
 ## Contributing
 
