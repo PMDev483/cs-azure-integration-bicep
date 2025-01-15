@@ -70,7 +70,7 @@ To enable indicators of attack (IOAs) for all the already existing subscriptions
 
 1. In the Azure portal, navigate to **Management Groups** and select the tenant root group.
 2. Go to **Governance** > **Policy** and select **Authoring** > **Assignments**.
-3. Click the **cs-ioa-assignment** assignment and then remediate the assignment by [creating a remediation task from a non-compliant policy assignment](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#option-2-create-a-remediation-task-from-a-non-compliant-policy-assignment).
+3. Click the **CrowdStrike IOA** assignment and then remediate the assignment by [creating a remediation task from a non-compliant policy assignment](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#option-2-create-a-remediation-task-from-a-non-compliant-policy-assignment).
 4. Click **Validate** to return to the cloud accounts page. Allow about two hours for the data to be available.
 
 #### Parameters

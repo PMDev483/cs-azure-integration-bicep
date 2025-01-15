@@ -57,7 +57,7 @@ resource csIOAPolicyAssignment 'Microsoft.Authorization/policyAssignments@2024-0
   properties: {
     assignmentType: 'Custom'
     description: 'Ensures that Activity Log data is send to CrowdStrike for Indicator of Attack (IOA) assessment.'
-    displayName: 'CrowdStrike IOA 2'
+    displayName: 'CrowdStrike IOA'
     enforcementMode: 'Default'
     policyDefinitionId: csIOAPolicyDefinition.id
     parameters: {
