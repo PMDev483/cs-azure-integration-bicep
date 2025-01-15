@@ -185,9 +185,8 @@ You can use any of these methods to pass parameters:
 
 #### Key Vault already existing
 
-When using our bicep files to set up Indicator Of Attacks, a Key Vault is created to store sensible information.
-
-As per Microsoft's recommendation, The Key Vault is created with [purge protection](https://learn.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview#purge-protection) enabled.
+When using our bicep files to set up Indicator Of Attack, a Key Vault is created to store sensible information.
+As per Microsoft's recommendation, the Key Vault is created with [purge protection](https://learn.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview#purge-protection) enabled.
 
 When deleting the resource group _cs-ioa-group_, the Key Vault gets soft-deleted.
 
