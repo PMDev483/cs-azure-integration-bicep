@@ -57,7 +57,7 @@ Ensure you have a CrowdStrike API client ID and client secret for Falcon Cloud S
 #### Deployment command
 
 ```sh
-az deployment mg create --name 'cs-fcs-managementgroup-deployment' --location westeurope \
+az deployment mg create --name 'cs-fcs-managementgroup-deployment' --location westus \
   --management-group-id $(az account show --query tenantId -o tsv) \
   --template-file cs-fcs-deployment-managementGroup.bicep \
   --only-show-errors
@@ -143,7 +143,7 @@ Ensure you have a CrowdStrike API client ID and client secret for Falcon Cloud S
 #### Deployment command
 
 ```sh
-az deployment sub create --name 'cs-fcs-subscription-deployment' --location westeurope \
+az deployment sub create --name 'cs-fcs-subscription-deployment' --location westus \
   --template-file cs-fcs-deployment-subscription.bicep \
   --only-show-errors
 ```
