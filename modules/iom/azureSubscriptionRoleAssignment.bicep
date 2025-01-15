@@ -13,7 +13,7 @@ param azurePrincipalId string
 param azurePrincipalType string = 'ServicePrincipal'
 
 param customRole object = {
-  roleName: 'CrowdStrike Website Reader'
+  roleName: 'cs-website-reader'
   roleDescription: 'CrowdStrike custom role to allow read access to App Service and Function.'
   roleActions: [
     'Microsoft.Web/sites/Read'
