@@ -66,7 +66,7 @@ az deployment mg create --name 'cs-managementgroup-deployment' --location westus
 
 #### Remediate Azure Policy Assignment
 
-To enable indicators of attack (IOAs) for all the already existing subscriptions, you must remediate the **cs-ioa-assignment** Azure policy assignment manually.
+To enable indicators of attack (IOAs) for all the already existing subscriptions on Azure, you must remediate the **CrowdStrike IOA** Azure policy assignment manually.
 
 1. In the Azure portal, navigate to **Management Groups** and select the tenant root group.
 2. Go to **Governance** > **Policy** and select **Authoring** > **Assignments**.
@@ -192,6 +192,16 @@ As per Microsoft's recommendation, the Key Vault is created with [purge protecti
 When deleting the resource group _cs-ioa-group_, the Key Vault gets soft-deleted.
 
 If you encounter any issues while trying to create the Key Vault, please follow [Microsoft's instruction](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-recovery?tabs=azure-portal#list-recover-or-purge-a-soft-deleted-key-vault) on how to recover a soft-deleted Key Vault.
+
+#### Indicator Of Attack still shown as inactive for discovered Subscriptions after registering an Azure management group
+
+After registering a management group and remediating the CrowdStrike IOA Azure policy assignment manually, it is possible that Indicator Of Attack remains inactive for some discovered subscriptions.
+
+This can happen when the diagnostic settings are not configured in the registered subscriptions.
+
+The evaluation of the assigned Azure Policy responsible for the diagnostic settings creation can take some time to properly evaluate which resources need to be remediated (See [Evaluation Triggers](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/get-compliance-data#evaluation-triggers)).
+
+Make sure that all the already existing subscriptions are properly listed under [resources to remediate](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#step-2-specify-remediation-task-details) when creating the remediation tasks.
 
 ## Contributing
 
