@@ -193,16 +193,13 @@ When deleting the resource group _cs-ioa-group_, the Key Vault gets soft-deleted
 
 If you encounter any issues while trying to create the Key Vault, please follow [Microsoft's instruction](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-recovery?tabs=azure-portal#list-recover-or-purge-a-soft-deleted-key-vault) on how to recover a soft-deleted Key Vault.
 
-#### Indicator Of Attack still shown as inactive for discovered Subscriptions after registering an Azure management group
+#### IOAs still shown as inactive for discovered subscriptions after registering an Azure management group
 
-After registering a management group and remediating the CrowdStrike IOA Azure policy assignment manually, it is possible that Indicator Of Attack remains inactive for some discovered subscriptions.
+After registering a management group and manually remediating the CrowdStrike IOA Azure policy assignment, IOAs can remain inactive for some discovered subscriptions. This can happen when the diagnostic settings are not configured in the registered subscriptions.
 
-This can happen when the diagnostic settings are not configured in the registered subscriptions.
+The evaluation of the assigned Azure policy responsible for the diagnostic settings creation can take some time to properly evaluate which resources need to be remediated (See [Evaluation Triggers](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/get-compliance-data#evaluation-triggers)).
 
-The evaluation of the assigned Azure Policy responsible for the diagnostic settings creation can take some time to properly evaluate which resources need to be remediated (See [Evaluation Triggers](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/get-compliance-data#evaluation-triggers)).
-
-Make sure that all the already existing subscriptions are properly listed under [resources to remediate](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#step-2-specify-remediation-task-details) when creating the remediation tasks.
-
+Make sure that all the existing subscriptions are properly listed under [resources to remediate](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#step-2-specify-remediation-task-details) when creating the remediation tasks.
 ## Contributing
 
 If you want to develop new content or improve on this collection, please open an issue or create a pull request. All contributions are welcome!
