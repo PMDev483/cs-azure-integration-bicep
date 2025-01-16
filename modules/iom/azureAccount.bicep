@@ -49,7 +49,6 @@ param location string = resourceGroup().location
 @description('Tags to be applied to all resources.')
 param tags object = {
   'cstag-vendor': 'crowdstrike'
-  'cstag-product': 'fcs'
 }
 
 /* Resources */
