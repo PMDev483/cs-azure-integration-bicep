@@ -12,7 +12,7 @@ targetScope = 'subscription'
 param location string = deployment().location
 
 @description('The prefix to be added to the deployment name.')
-param deploymentNamePrefix string = 'cs-fcs-ioa'
+param deploymentNamePrefix string = 'cs-ioa'
 
 @description('The suffix to be added to the deployment name.')
 param deploymentNameSuffix string = utcNow()
@@ -23,7 +23,6 @@ param resourceGroupName string = 'cs-ioa-group' // DO NOT CHANGE - used for regi
 @description('Tags to be applied to all resources.')
 param tags object = {
   'cstag-vendor': 'crowdstrike'
-  'cstag-product': 'fcs'
 }
 
 @description('The CID for the Falcon API.')

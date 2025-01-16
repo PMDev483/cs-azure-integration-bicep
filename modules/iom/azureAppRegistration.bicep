@@ -11,7 +11,7 @@ extension microsoftGraphV1
 
 /* Parameters */
 @description('Name of the Application Registration.')
-param applicationName string = 'CrowdStrikeFCS-${uniqueString(tenant().tenantId)}'
+param applicationName string = 'CrowdStrike-${uniqueString(tenant().tenantId)}'
 
 @secure()
 @description('Public certificate data.')

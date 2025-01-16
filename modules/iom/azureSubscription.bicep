@@ -16,7 +16,7 @@ extension microsoftGraphV1
 param targetScope string
 
 @description('The prefix to be added to the deployment name.')
-param deploymentNamePrefix string = 'cs-fcs-iom'
+param deploymentNamePrefix string = 'cs-iom'
 
 @description('The suffix to be added to the deployment name.')
 param deploymentNameSuffix string = utcNow()
@@ -70,7 +70,6 @@ param location string = deployment().location
 @description('Tags to be applied to all resources.')
 param tags object = {
   'cstag-vendor': 'crowdstrike'
-  'cstag-product': 'fcs'
 }
 
 /* Create Azure Resource Group for IOM resources */

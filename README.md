@@ -58,19 +58,19 @@ Ensure you have a CrowdStrike API client ID and client secret for Falcon Cloud S
 #### Deployment command
 
 ```sh
-az deployment mg create --name 'cs-fcs-managementgroup-deployment' --location westus \
+az deployment mg create --name 'cs-managementgroup-deployment' --location westus \
   --management-group-id $(az account show --query tenantId -o tsv) \
-  --template-file cs-fcs-deployment-managementGroup.bicep \
+  --template-file cs-deployment-managementGroup.bicep \
   --only-show-errors
 ```
 
 #### Remediate Azure Policy Assignment
 
-To enable indicators of attack (IOAs) for all the already existing subscriptions, you must remediate the **cs-ioa-assignment** Azure policy assignment manually.
+To enable indicators of attack (IOAs) for all the already existing subscriptions on Azure, you must remediate the **CrowdStrike IOA** Azure policy assignment manually.
 
 1. In the Azure portal, navigate to **Management Groups** and select the tenant root group.
 2. Go to **Governance** > **Policy** and select **Authoring** > **Assignments**.
-3. Click the **cs-ioa-assignment** assignment and then remediate the assignment by [creating a remediation task from a non-compliant policy assignment](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#option-2-create-a-remediation-task-from-a-non-compliant-policy-assignment).
+3. Click the **CrowdStrike IOA** assignment and then remediate the assignment by [creating a remediation task from a non-compliant policy assignment](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#option-2-create-a-remediation-task-from-a-non-compliant-policy-assignment).
 4. Click **Validate** to return to the cloud accounts page. Allow about two hours for the data to be available.
 
 #### Parameters
@@ -144,8 +144,8 @@ Ensure you have a CrowdStrike API client ID and client secret for Falcon Cloud S
 #### Deployment command
 
 ```sh
-az deployment sub create --name 'cs-fcs-subscription-deployment' --location westus \
-  --template-file cs-fcs-deployment-subscription.bicep \
+az deployment sub create --name 'cs-subscription-deployment' --location westus \
+  --template-file cs-deployment-subscription.bicep \
   --only-show-errors
 ```
 
@@ -193,6 +193,13 @@ When deleting the resource group _cs-ioa-group_, the Key Vault gets soft-deleted
 
 If you encounter any issues while trying to create the Key Vault, please follow [Microsoft's instruction](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-recovery?tabs=azure-portal#list-recover-or-purge-a-soft-deleted-key-vault) on how to recover a soft-deleted Key Vault.
 
+#### IOAs still shown as inactive for discovered subscriptions after registering an Azure management group
+
+After registering a management group and manually remediating the CrowdStrike IOA Azure policy assignment, IOAs can remain inactive for some discovered subscriptions. This can happen when the diagnostic settings are not configured in the registered subscriptions.
+
+The evaluation of the assigned Azure policy responsible for the diagnostic settings creation can take some time to properly evaluate which resources need to be remediated (See [Evaluation Triggers](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/get-compliance-data#evaluation-triggers)).
+
+Make sure that all the existing subscriptions are properly listed under [resources to remediate](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#step-2-specify-remediation-task-details) when creating the remediation tasks.
 ## Contributing
 
 If you want to develop new content or improve on this collection, please open an issue or create a pull request. All contributions are welcome!
@@ -201,8 +208,8 @@ If you want to develop new content or improve on this collection, please open an
 
 This is a community-driven, open source project aimed to register Falcon Cloud Security with Azure using Bicep. While not an official CrowdStrike product, this repository is maintained by CrowdStrike and supported in collaboration with the open source developer community.
 
-For additional information, please refer to the [SUPPORT.md](https://github.com/CrowdStrike/fcs-azure-bicep/main/SUPPORT.md) file.
+For additional information, please refer to the [SUPPORT.md](https://github.com/CrowdStrike/cs-azure-integration-bicep/main/SUPPORT.md) file.
 
 ## License Information
 
-See the [LICENSE](https://github.com/CrowdStrike/fcs-azure-bicep/main/LICENSE) for more information.
+See the [LICENSE](https://github.com/CrowdStrike/cs-azure-integration-bicep/main/LICENSE) for more information.

@@ -19,7 +19,7 @@ param targetScope string = 'ManagementGroup'
 param defaultSubscriptionId string
 
 @description('The prefix to be added to the deployment name.')
-param deploymentNamePrefix string = 'cs-fcs'
+param deploymentNamePrefix string = 'cs'
 
 @description('The suffix to be added to the deployment name.')
 param deploymentNameSuffix string = utcNow()
@@ -73,7 +73,6 @@ param location string = deployment().location
 @description('Tags to be applied to all resources.')
 param tags object = {
   'cstag-vendor': 'crowdstrike'
-  'cstag-product': 'fcs'
 }
 
 /* IOM-specific parameter */
@@ -130,7 +129,7 @@ module iomAzureManagementGroup 'modules/iom/azureManagementGroupRoleAssignment.b
   }
 }
 
-module ioaAzureSubscription 'modules/cs-fcs-ioa-deployment.bicep' = if (deployIOA && targetScope == 'ManagementGroup') {
+module ioaAzureSubscription 'modules/cs-ioa-deployment.bicep' = if (deployIOA && targetScope == 'ManagementGroup') {
   name: '${deploymentNamePrefix}-ioa-azureSubscription-${deploymentNameSuffix}'
   scope: subscription(defaultSubscriptionId) // DO NOT CHANGE
   params:{

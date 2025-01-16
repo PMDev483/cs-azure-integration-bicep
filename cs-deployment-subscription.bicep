@@ -16,7 +16,7 @@ targetScope = 'subscription'
 param targetScope string = 'Subscription'
 
 @description('The prefix to be added to the deployment name.')
-param deploymentNamePrefix string = 'cs-fcs'
+param deploymentNamePrefix string = 'cs'
 
 @description('The suffix to be added to the deployment name.')
 param deploymentNameSuffix string = utcNow()
@@ -73,7 +73,6 @@ param location string = deployment().location
 @description('Tags to be applied to all resources.')
 param tags object = {
   'cstag-vendor': 'crowdstrike'
-  'cstag-product': 'fcs'
 }
 
 /* IOM-specific parameter */
@@ -119,7 +118,7 @@ module iomAzureSubscription 'modules/iom/azureSubscription.bicep' = if (deployIO
   }
 }
 
-module ioaAzureSubscription 'modules/cs-fcs-ioa-deployment.bicep' = if (deployIOA && targetScope == 'Subscription') {
+module ioaAzureSubscription 'modules/cs-ioa-deployment.bicep' = if (deployIOA && targetScope == 'Subscription') {
   name: '${deploymentNamePrefix}-ioa-azureSubscription-${deploymentNameSuffix}'
   scope: subscription(defaultSubscriptionId)
   params:{
