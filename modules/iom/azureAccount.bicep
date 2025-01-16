@@ -54,8 +54,8 @@ param tags object = {
 
 /* Resources */
 /* Register Azure account(s) in Falcon Falcon Cloud Security */
-resource fcsAzureAccount 'Microsoft.Resources/deploymentScripts@2023-08-01' = {
-  name: 'cs-fcs-iom-${subscription().subscriptionId}'
+resource azureAccount 'Microsoft.Resources/deploymentScripts@2023-08-01' = {
+  name: 'cs-iom-${subscription().subscriptionId}'
   location: location
   tags: tags
   kind: 'AzurePowerShell'
@@ -84,11 +84,11 @@ resource fcsAzureAccount 'Microsoft.Resources/deploymentScripts@2023-08-01' = {
       }
     ]
     arguments: '-AzureAccountType ${azureAccountType} -AzureTenantId ${tenant().tenantId} -AzureSubscriptionId ${subscription().subscriptionId} -TargetScope ${targetScope} -UseExistingAppRegistration ${useExistingAppRegistration}'
-    scriptContent: loadTextContent('../../scripts/New-FcsAzureAccount.ps1')
+    scriptContent: loadTextContent('../../scripts/New-AzureAccount.ps1')
     retentionInterval: 'PT1H'
     cleanupPreference: 'OnSuccess'
   }
 }
 
 /* Outputs */
-output azurePublicCertificate string = fcsAzureAccount.properties.outputs.public_certificate
+output azurePublicCertificate string = azureAccount.properties.outputs.public_certificate

@@ -12,7 +12,7 @@ targetScope = 'subscription'
 param location string = deployment().location
 
 @description('The prefix to be added to the deployment name.')
-param deploymentNamePrefix string = 'cs-fcs-ioa'
+param deploymentNamePrefix string = 'cs-ioa'
 
 @description('The suffix to be added to the deployment name.')
 param deploymentNameSuffix string = utcNow()

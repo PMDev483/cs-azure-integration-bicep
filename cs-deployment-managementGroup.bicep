@@ -1,4 +1,4 @@
-targetScope = 'subscription'
+targetScope = 'managementGroup'
 
 /*
   This Bicep template deploys CrowdStrike Falcon Cloud Security integration for
@@ -13,10 +13,13 @@ targetScope = 'subscription'
   'ManagementGroup'
   'Subscription'
 ])
-param targetScope string = 'Subscription'
+param targetScope string = 'ManagementGroup'
+
+@description('Subscription Id of the default Azure Subscription.')
+param defaultSubscriptionId string
 
 @description('The prefix to be added to the deployment name.')
-param deploymentNamePrefix string = 'cs-fcs'
+param deploymentNamePrefix string = 'cs'
 
 @description('The suffix to be added to the deployment name.')
 param deploymentNameSuffix string = utcNow()
@@ -33,9 +36,6 @@ param falconClientId string
 @description('Client secret for the Falcon API.')
 @secure()
 param falconClientSecret string
-
-@description('Subscription Id of the default Azure Subscription.')
-param defaultSubscriptionId string
 
 @description('Falcon cloud region. Defaults to US-1, allowed values are US-1, US-2 or EU-1.')
 @allowed([
@@ -80,8 +80,11 @@ param tags object = {
 @description('Deploy Indicator of Misconfiguration (IOM) integration. Defaults to true.')
 param deployIOM bool = true
 
-@description('Assign required permissions on Azure Default Subscription automatically. Defaults to true.')
-param assignAzureSubscriptionPermissions bool = true
+@description('Assign required permissions on Azure Default Subscription automatically. Defaults to false.')
+param assignAzureSubscriptionPermissions bool = false
+
+@description('Assign required permissions Azure Management Group automatically. Defaults to true.')
+param assignAzureManagementGroupPermissions bool = true
 
 /* IOA-specific parameter */
 @description('Deploy Indicator of Attack (IOA) integration. Defaults to true.')
@@ -98,9 +101,9 @@ param deployActivityLogDiagnosticSettings bool = true
 param deployEntraLogDiagnosticSettings bool = true
 
 /* Resources */
-module iomAzureSubscription 'modules/iom/azureSubscription.bicep' = if (deployIOM && targetScope == 'Subscription') {
+module iomAzureSubscription 'modules/iom/azureSubscription.bicep' = if (deployIOM && targetScope == 'ManagementGroup') {
   name: '${deploymentNamePrefix}-iom-azureSubscription-${deploymentNameSuffix}'
-  scope: subscription()
+  scope: subscription(defaultSubscriptionId)
   params: {
     targetScope: targetScope
     resourceGroupName: resourceGroupName
@@ -119,20 +122,37 @@ module iomAzureSubscription 'modules/iom/azureSubscription.bicep' = if (deployIO
   }
 }
 
-module ioaAzureSubscription 'modules/cs-fcs-ioa-deployment.bicep' = if (deployIOA && targetScope == 'Subscription') {
+module iomAzureManagementGroup 'modules/iom/azureManagementGroupRoleAssignment.bicep' = if (deployIOM && assignAzureManagementGroupPermissions) {
+  name: '${deploymentNamePrefix}-iom-azureManagementGroupRoleAssignment-${deploymentNameSuffix}'
+  scope: managementGroup()
+  params: {
+    azurePrincipalId: iomAzureSubscription.outputs.azurePrincipalId
+  }
+}
+
+module ioaAzureSubscription 'modules/cs-ioa-deployment.bicep' = if (deployIOA && targetScope == 'ManagementGroup') {
   name: '${deploymentNamePrefix}-ioa-azureSubscription-${deploymentNameSuffix}'
-  scope: subscription(defaultSubscriptionId)
+  scope: subscription(defaultSubscriptionId) // DO NOT CHANGE
   params:{
     falconCID: falconCID
     falconClientId: falconClientId
     falconClientSecret: falconClientSecret
-    defaultSubscriptionId: defaultSubscriptionId
-    subscriptionId: subscription().subscriptionId
     falconCloudRegion: falconCloudRegion
     enableAppInsights: enableAppInsights
+    defaultSubscriptionId: defaultSubscriptionId // DO NOT CHANGE
     deployActivityLogDiagnosticSettings: deployActivityLogDiagnosticSettings
     deployEntraLogDiagnosticSettings: deployEntraLogDiagnosticSettings
     location: location
     tags: tags
+  }
+}
+
+module ioaAzurePolicyAssignment 'modules/ioa/activityLogPolicy.bicep' = if (deployIOA && targetScope == 'ManagementGroup' && deployActivityLogDiagnosticSettings) {
+  name: '${deploymentNamePrefix}-ioa-azurePolicyAssignment-${deploymentNameSuffix}'
+  scope: managementGroup()
+  params: {
+    eventHubName: ioaAzureSubscription.outputs.activityLogEventHubName
+    eventHubAuthorizationRuleId: ioaAzureSubscription.outputs.eventHubAuthorizationRuleId
+    location: location
   }
 }
