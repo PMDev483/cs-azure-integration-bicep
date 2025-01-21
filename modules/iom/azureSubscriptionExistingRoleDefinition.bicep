@@ -19,11 +19,7 @@ param customRole object = {
   ]
 }
 
-// resource existingCustomRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
-//   name: guid(customRole.roleName, subscription().id)
-// }
-
-module assignableScope 'getAssignableScope.bicep' = {
+module assignableScope 'azureRoleDefinitionAssignableScope.bicep' = {
     name: guid('getAssignableScope',customRole.roleName, subscription().id)
     params: {
         customRoleName: customRole.roleName
@@ -33,7 +29,7 @@ module assignableScope 'getAssignableScope.bicep' = {
 resource modifyExistingCustomRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
   name: guid(customRole.roleName, subscription().id)
   properties: {
-    assignableScopes: concat(assignableScope.outputs.assignableScopes,[subscriptionId])
+    assignableScopes: union(assignableScope.outputs.assignableScopes,[subscriptionId])
     description: customRole.roleDescription
         permissions: [
           {
