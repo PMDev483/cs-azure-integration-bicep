@@ -81,28 +81,28 @@ You can use any of these methods to pass parameters:
 - Deploy the Bicep file using the parameters file: [deploy bicep file with parameters file](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/parameter-files?tabs=Bicep#deploy-bicep-file-with-parameters-file)
 - Pass the parameters as arguments: [inline-parameters](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-cli#inline-parameters)
 
-| Parameter name                          | Required | Description                                                                                                                    |
-|-----------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------|
-| `defaultSubscriptionId`                 | yes      | Subscription Id of the default Azure Subscription.                                                                             |
-| `falconCID`                             | yes      | CID for the Falcon API.                                                                                                        |
-| `falconClientId`                        | yes      | Client ID for the Falcon API.                                                                                                  |
-| `falconClientSecret`                    | yes      | Client secret for the Falcon API.                                                                                              |
-| `falconCloudRegion`                     | no       | Falcon cloud region. Defaults to `US-1`. Allowed values are `US-1`, `US-2`, or `EU-1`.                                         |
-| `useExistingAppRegistration`            | no       | Use an existing Application Registration. Defaults to `false`.                                                                 |
-| `grantAppRegistrationAdminConsent`      | no       | Grant admin consent for Application Registration. Defaults to `true`.                                                          |
-| `azureClientId`                         | no       | Application Id of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.     |
+| Parameter name                          | Required | Description                                                                                                                   |
+|-----------------------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------|
+| `defaultSubscriptionId`                 | yes      | Subscription Id of the default Azure Subscription.                                                                            |
+| `falconCID`                             | yes      | CID for the Falcon API.                                                                                                       |
+| `falconClientId`                        | yes      | Client ID for the Falcon API.                                                                                                 |
+| `falconClientSecret`                    | yes      | Client secret for the Falcon API.                                                                                             |
+| `falconCloudRegion`                     | yes      | Falcon cloud region. Allowed values are `US-1`, `US-2`, or `EU-1`.                                         |
+| `useExistingAppRegistration`            | no       | Use an existing Application Registration. Defaults to `false`.                                                                |
+| `grantAppRegistrationAdminConsent`      | no       | Grant admin consent for Application Registration. Defaults to `true`.                                                         |
+| `azureClientId`                         | no       | Application Id of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.    |
 | `azureClientSecret`                     | no       | Application Secret of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`. |
-| `azurePrincipalId`                      | no       | Principal Id of the Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.               |
-| `azureAccountType`                      | no       | Type of the Azure account to integrate.                                                                                        |
-| `location`                              | no       | Location for the resources deployed in this solution.                                                                          |
-| `tags`                                  | no       | Tags to be applied to all resources.                                                                                           |
-| `deployIOM`                             | no       | Deploy Indicator of Misconfiguration (IOM) integration. Defaults to `true`.                                                    |
-| `assignAzureSubscriptionPermissions`    | no       | Assign required permissions on Azure Default Subscription automatically. Defaults to `false`.                                  |
-| `assignAzureManagementGroupPermissions` | no       | Assign required permissions Azure Management Group automatically. Defaults to `true`.                                          |
-| `deployIOA`                             | no       | Deploy Indicator of Attack (IOA) integration. Defaults to `true`.                                                              |
-| `enableAppInsights`                     | no       | Enable Application Insights for additional logging of Function Apps. Defaults to `false`.                                      |
-| `deployActivityLogDiagnosticSettings`   | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                   |
-| `deployEntraLogDiagnosticSettings`      | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                      |
+| `azurePrincipalId`                      | no       | Principal Id of the Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.              |
+| `azureAccountType`                      | no       | Type of the Azure account to integrate.                                                                                       |
+| `location`                              | no       | Location for the resources deployed in this solution.                                                                         |
+| `tags`                                  | no       | Tags to be applied to all resources.                                                                                          |
+| `deployIOM`                             | no       | Deploy Indicator of Misconfiguration (IOM) integration. Defaults to `true`.                                                   |
+| `assignAzureSubscriptionPermissions`    | no       | Assign required permissions on Azure Default Subscription automatically. Defaults to `false`.                                 |
+| `assignAzureManagementGroupPermissions` | no       | Assign required permissions Azure Management Group automatically. Defaults to `true`.                                         |
+| `deployIOA`                             | no       | Deploy Indicator of Attack (IOA) integration. Defaults to `true`.                                                             |
+| `enableAppInsights`                     | no       | Enable Application Insights for additional logging of Function Apps. Defaults to `false`.                                     |
+| `deployActivityLogDiagnosticSettings`   | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                  |
+| `deployEntraLogDiagnosticSettings`      | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                     |
 
 ### Register a single Azure Subscription
 
@@ -160,27 +160,27 @@ You can use any of these methods to pass parameters:
 - Deploy the Bicep file using the parameters file: [deploy bicep file with parameters file](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/parameter-files?tabs=Bicep#deploy-bicep-file-with-parameters-file)
 - Pass the parameters as arguments: [inline-parameters](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-cli#inline-parameters)
 
-| Parameter name                        | Required | Description                                                                                                                    |
-|---------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------|
-| `defaultSubscriptionId`               | yes      | Subscription Id of the default Azure Subscription.                                                                             |
-| `falconCID`                           | yes      | CID for the Falcon API.                                                                                                        |
-| `falconClientId`                      | yes      | Client ID for the Falcon API.                                                                                                  |
-| `falconClientSecret`                  | yes      | Client secret for the Falcon API.                                                                                              |
-| `falconCloudRegion`                   | no       | Falcon cloud region. Defaults to `US-1`. Allowed values are `US-1`, `US-2`, or `EU-1`.                                         |
-| `useExistingAppRegistration`          | no       | Use an existing Application Registration. Defaults to `false`.                                                                 |
-| `grantAppRegistrationAdminConsent`    | no       | Grant admin consent for Application Registration. Defaults to `true`.                                                          |
-| `azureClientId`                       | no       | Application Id of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.     |
+| Parameter name                        | Required | Description                                                                                                                  |
+|---------------------------------------|----------|------------------------------------------------------------------------------------------------------------------------------|
+| `defaultSubscriptionId`               | yes      | Subscription Id of the default Azure Subscription.                                                                           |
+| `falconCID`                           | yes      | CID for the Falcon API.                                                                                                      |
+| `falconClientId`                      | yes      | Client ID for the Falcon API.                                                                                                |
+| `falconClientSecret`                  | yes      | Client secret for the Falcon API.                                                                                            |
+| `falconCloudRegion`                   | yes      | Falcon cloud region. Allowed values are `US-1`, `US-2`, or `EU-1`.                                         |
+| `useExistingAppRegistration`          | no       | Use an existing Application Registration. Defaults to `false`.                                                               |
+| `grantAppRegistrationAdminConsent`    | no       | Grant admin consent for Application Registration. Defaults to `true`.                                                        |
+| `azureClientId`                       | no       | Application Id of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.   |
 | `azureClientSecret`                   | no       | Application Secret of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`. |
-| `azurePrincipalId`                    | no       | Principal Id of the Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.               |
-| `azureAccountType`                    | no       | Type of the Azure account to integrate.                                                                                        |
-| `location`                            | no       | Location for the resources deployed in this solution.                                                                          |
-| `tags`                                | no       | Tags to be applied to all resources.                                                                                           |
-| `deployIOM`                           | no       | Deploy Indicator of Misconfiguration (IOM) integration. Defaults to `true`.                                                    |
-| `assignAzureSubscriptionPermissions`  | no       | Assign required permissions on Azure Default Subscription automatically. Defaults to `true`.                                   |
-| `deployIOA`                           | no       | Deploy Indicator of Attack (IOA) integration. Defaults to `true`.                                                              |
-| `enableAppInsights`                   | no       | Enable Application Insights for additional logging of Function Apps. Defaults to `false`.                                      |
-| `deployActivityLogDiagnosticSettings` | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                   |
-| `deployEntraLogDiagnosticSettings`    | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                      |
+| `azurePrincipalId`                    | no       | Principal Id of the Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.             |
+| `azureAccountType`                    | no       | Type of the Azure account to integrate.                                                                                      |
+| `location`                            | no       | Location for the resources deployed in this solution.                                                                        |
+| `tags`                                | no       | Tags to be applied to all resources.                                                                                         |
+| `deployIOM`                           | no       | Deploy Indicator of Misconfiguration (IOM) integration. Defaults to `true`.                                                  |
+| `assignAzureSubscriptionPermissions`  | no       | Assign required permissions on Azure Default Subscription automatically. Defaults to `true`.                                 |
+| `deployIOA`                           | no       | Deploy Indicator of Attack (IOA) integration. Defaults to `true`.                                                            |
+| `enableAppInsights`                   | no       | Enable Application Insights for additional logging of Function Apps. Defaults to `false`.                                    |
+| `deployActivityLogDiagnosticSettings` | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                 |
+| `deployEntraLogDiagnosticSettings`    | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                    |
 
 ### Troubleshooting
 
