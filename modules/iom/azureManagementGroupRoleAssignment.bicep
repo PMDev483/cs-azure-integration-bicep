@@ -13,7 +13,7 @@ param azurePrincipalId string
 @description('Type of the Principal. Defaults to ServicePrincipal.')
 param azurePrincipalType string = 'ServicePrincipal'
 
-param customRole object = {
+var customRole = {
   roleName: 'cs-website-reader'
   roleDescription: 'CrowdStrike custom role to allow read access to App Service and Function.'
   roleActions: [

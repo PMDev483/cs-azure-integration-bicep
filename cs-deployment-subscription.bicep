@@ -43,7 +43,7 @@ param defaultSubscriptionId string
   'US-2'
   'EU-1'
 ])
-param falconCloudRegion string = 'US-1'
+param falconCloudRegion string
 
 @description('Use an existing Application Registration. Defaults to false.')
 param useExistingAppRegistration bool = false
@@ -106,6 +106,7 @@ module iomAzureSubscription 'modules/iom/azureSubscription.bicep' = if (deployIO
     falconClientId: falconClientId
     falconClientSecret: falconClientSecret
     falconCloudRegion: falconCloudRegion
+    defaultSubscriptionId: defaultSubscriptionId
     useExistingAppRegistration: useExistingAppRegistration
     grantAppRegistrationAdminConsent: grantAppRegistrationAdminConsent
     azureClientId: useExistingAppRegistration ? '' : azureClientId

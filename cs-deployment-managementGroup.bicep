@@ -43,7 +43,7 @@ param falconClientSecret string
   'US-2'
   'EU-1'
 ])
-param falconCloudRegion string = 'US-1'
+param falconCloudRegion string
 
 @description('Use an existing Application Registration. Defaults to false.')
 param useExistingAppRegistration bool = false
