@@ -6,7 +6,7 @@ targetScope = 'subscription'
   Copyright (c) 2024 CrowdStrike, Inc.
 */
 
-param customRole object = {
+var customRole = {
   roleName: 'cs-website-reader'
   roleDescription: 'CrowdStrike custom role to allow read access to App Service and Function.'
   roleActions: [

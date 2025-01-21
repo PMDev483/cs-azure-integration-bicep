@@ -9,7 +9,7 @@ targetScope = 'subscription'
 @description('Subscription Id of the targeted Azure Subscription.')
 param subscriptionId string
 
-param customRole object = {
+var customRole = {
   roleName: 'cs-website-reader'
   roleDescription: 'CrowdStrike custom role to allow read access to App Service and Function.'
   roleActions: [
