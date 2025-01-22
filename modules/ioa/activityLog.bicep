@@ -24,7 +24,7 @@ param diagnosticSettingsName string = 'cs-monitor-activity-to-eventhub'
   Note:
    - 'Contributor' permissions are required to create Azure Activity Logs diagnostic settings
 */
-resource activityDiagnosticSetttings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+resource activityDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: diagnosticSettingsName
   properties: {
     eventHubAuthorizationRuleId: eventHubAuthorizationRuleId
