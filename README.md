@@ -55,24 +55,6 @@ Ensure you have a CrowdStrike API client ID and client secret for Falcon Cloud S
 - **Owner** role for the Azure management group to be integrated into Falcon Cloud Security
 - **Owner** role for the Azure subscription to be used for deployment of the infrastructure for Indicator of Attack (IOA) assessment
 
-#### Deployment command
-
-```sh
-az deployment mg create --name 'cs-managementgroup-deployment' --location westus \
-  --management-group-id $(az account show --query tenantId -o tsv) \
-  --template-file cs-deployment-managementGroup.bicep \
-  --only-show-errors
-```
-
-#### Remediate Azure Policy Assignment
-
-To enable indicators of attack (IOAs) for all the already existing subscriptions on Azure, you must remediate the **CrowdStrike IOA** Azure policy assignment manually.
-
-1. In the Azure portal, navigate to **Management Groups** and select the tenant root group.
-2. Go to **Governance** > **Policy** and select **Authoring** > **Assignments**.
-3. Click the **CrowdStrike IOA** assignment and then remediate the assignment by [creating a remediation task from a non-compliant policy assignment](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#option-2-create-a-remediation-task-from-a-non-compliant-policy-assignment).
-4. Click **Validate** to return to the cloud accounts page. Allow about two hours for the data to be available.
-
 #### Parameters
 
 You can use any of these methods to pass parameters:
@@ -103,6 +85,24 @@ You can use any of these methods to pass parameters:
 | `enableAppInsights`                     | no       | Enable Application Insights for additional logging of Function Apps. Defaults to `false`.                                     |
 | `deployActivityLogDiagnosticSettings`   | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                  |
 | `deployEntraLogDiagnosticSettings`      | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                     |
+
+#### Deployment command
+
+```sh
+az deployment mg create --name 'cs-managementgroup-deployment' --location westus \
+  --management-group-id $(az account show --query tenantId -o tsv) \
+  --template-file cs-deployment-managementGroup.bicep \
+  --only-show-errors
+```
+
+#### Remediate Azure Policy Assignment
+
+To enable indicators of attack (IOAs) for all the already existing subscriptions on Azure, you must remediate the **CrowdStrike IOA** Azure policy assignment manually.
+
+1. In the Azure portal, navigate to **Management Groups** and select the tenant root group.
+2. Go to **Governance** > **Policy** and select **Authoring** > **Assignments**.
+3. Click the **CrowdStrike IOA** assignment and then remediate the assignment by [creating a remediation task from a non-compliant policy assignment](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#option-2-create-a-remediation-task-from-a-non-compliant-policy-assignment).
+4. Click **Validate** to return to the cloud accounts page. Allow about two hours for the data to be available.
 
 ### Register a single Azure Subscription
 
@@ -141,17 +141,6 @@ Ensure you have a CrowdStrike API client ID and client secret for Falcon Cloud S
 
 - **Owner** role of the Azure subscription to be integrated into CrowdStrike Falcon Cloud Security
 
-#### Deployment command
-
-```sh
-az deployment sub create --name 'cs-subscription-deployment' --location westus \
-  --template-file cs-deployment-subscription.bicep \
-  --only-show-errors
-```
-
-> [!NOTE]
-> The deployment command can be executed multiple times to register additional Azure subscriptions into CrowdStrike Falcon Cloud Security.
-
 #### Parameters
 
 You can use any of these methods to pass parameters:
@@ -181,6 +170,17 @@ You can use any of these methods to pass parameters:
 | `enableAppInsights`                   | no       | Enable Application Insights for additional logging of Function Apps. Defaults to `false`.                                    |
 | `deployActivityLogDiagnosticSettings` | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                 |
 | `deployEntraLogDiagnosticSettings`    | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                    |
+
+#### Deployment command
+
+```sh
+az deployment sub create --name 'cs-subscription-deployment' --location westus \
+  --template-file cs-deployment-subscription.bicep \
+  --only-show-errors
+```
+
+> [!NOTE]
+> The deployment command can be executed multiple times to register additional Azure subscriptions into CrowdStrike Falcon Cloud Security.
 
 ### Troubleshooting
 
