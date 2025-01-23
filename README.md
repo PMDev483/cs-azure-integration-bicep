@@ -200,6 +200,16 @@ After registering a management group and manually remediating the CrowdStrike IO
 The evaluation of the assigned Azure policy responsible for the diagnostic settings creation can take some time to properly evaluate which resources need to be remediated (See [Evaluation Triggers](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/get-compliance-data#evaluation-triggers)).
 
 Make sure that all the existing subscriptions are properly listed under [resources to remediate](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#step-2-specify-remediation-task-details) when creating the remediation tasks.
+
+#### Tenant ID, application ID, principal ID, and scope are not allowed to be updated
+
+It is possible that you encounter this error when running the registering a management group using Bicep.
+This happens when you have pre-existing role assignments of the **Monitoring Contributor**, **Lab Services Reader** and **Azure Event Hubs Data Owner**  roles to a deleted management identity created by the **CrowdStrike IOA** policy assignment.
+
+In the Azure portal, navigate to Management Groups and select the tenant root group.
+
+Go to Access Control (IAM) and delete all role assignments of the **Monitoring Contributor**, **Lab Services Reader** and **Azure Event Hubs Data Owner** roles assigned to **Identity not found**
+
 ## Contributing
 
 If you want to develop new content or improve on this collection, please open an issue or create a pull request. All contributions are welcome!
