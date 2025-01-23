@@ -55,6 +55,37 @@ Ensure you have a CrowdStrike API client ID and client secret for Falcon Cloud S
 - **Owner** role for the Azure management group to be integrated into Falcon Cloud Security
 - **Owner** role for the Azure subscription to be used for deployment of the infrastructure for Indicator of Attack (IOA) assessment
 
+#### Parameters
+
+You can use any of these methods to pass parameters:
+
+- Generate a parameter file: [generate-params](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/bicep-cli#generate-params)
+- Deploy the Bicep file using the parameters file: [deploy bicep file with parameters file](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/parameter-files?tabs=Bicep#deploy-bicep-file-with-parameters-file)
+- Pass the parameters as arguments: [inline-parameters](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-cli#inline-parameters)
+
+| Parameter name                          | Required | Description                                                                                                                    |
+|-----------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------|
+| `defaultSubscriptionId`                 | yes      | Subscription Id of the default Azure Subscription.                                                                             |
+| `falconCID`                             | yes      | CID for the Falcon API.                                                                                                        |
+| `falconClientId`                        | yes      | Client ID for the Falcon API.                                                                                                  |
+| `falconClientSecret`                    | yes      | Client secret for the Falcon API.                                                                                              |
+| `falconCloudRegion`                     | yes      | Falcon cloud region. Allowed values are `US-1`, `US-2`, or `EU-1`.                                                             |
+| `useExistingAppRegistration`            | no       | Use an existing Application Registration. Defaults to `false`.                                                                 |
+| `grantAppRegistrationAdminConsent`      | no       | Grant admin consent for Application Registration. Defaults to `true`.                                                          |
+| `azureClientId`                         | no       | Application Id of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.     |
+| `azureClientSecret`                     | no       | Application Secret of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`. |
+| `azurePrincipalId`                      | no       | Principal Id of the Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.               |
+| `azureAccountType`                      | no       | Type of the Azure account to integrate.                                                                                        |
+| `location`                              | no       | Location for the resources deployed in this solution.                                                                          |
+| `tags`                                  | no       | Tags to be applied to all resources.                                                                                           |
+| `deployIOM`                             | no       | Deploy Indicator of Misconfiguration (IOM) integration. Defaults to `true`.                                                    |
+| `assignAzureSubscriptionPermissions`    | no       | Assign required permissions on Azure Default Subscription automatically. Defaults to `false`.                                  |
+| `assignAzureManagementGroupPermissions` | no       | Assign required permissions Azure Management Group automatically. Defaults to `true`.                                          |
+| `deployIOA`                             | no       | Deploy Indicator of Attack (IOA) integration. Defaults to `true`.                                                              |
+| `enableAppInsights`                     | no       | Enable Application Insights for additional logging of Function Apps. Defaults to `false`.                                      |
+| `deployActivityLogDiagnosticSettings`   | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                   |
+| `deployEntraLogDiagnosticSettings`      | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                      |
+
 #### Deployment command
 
 ```sh
@@ -72,37 +103,6 @@ To enable indicators of attack (IOAs) for all the already existing subscriptions
 2. Go to **Governance** > **Policy** and select **Authoring** > **Assignments**.
 3. Click the **CrowdStrike IOA** assignment and then remediate the assignment by [creating a remediation task from a non-compliant policy assignment](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#option-2-create-a-remediation-task-from-a-non-compliant-policy-assignment).
 4. Click **Validate** to return to the cloud accounts page. Allow about two hours for the data to be available.
-
-#### Parameters
-
-You can use any of these methods to pass parameters:
-
-- Generate a parameter file: [generate-params](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/bicep-cli#generate-params)
-- Deploy the Bicep file using the parameters file: [deploy bicep file with parameters file](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/parameter-files?tabs=Bicep#deploy-bicep-file-with-parameters-file)
-- Pass the parameters as arguments: [inline-parameters](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-cli#inline-parameters)
-
-| Parameter name                          | Required | Description                                                                                                                   |
-|-----------------------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------|
-| `defaultSubscriptionId`                 | yes      | Subscription Id of the default Azure Subscription.                                                                            |
-| `falconCID`                             | yes      | CID for the Falcon API.                                                                                                       |
-| `falconClientId`                        | yes      | Client ID for the Falcon API.                                                                                                 |
-| `falconClientSecret`                    | yes      | Client secret for the Falcon API.                                                                                             |
-| `falconCloudRegion`                     | yes      | Falcon cloud region. Allowed values are `US-1`, `US-2`, or `EU-1`.                                         |
-| `useExistingAppRegistration`            | no       | Use an existing Application Registration. Defaults to `false`.                                                                |
-| `grantAppRegistrationAdminConsent`      | no       | Grant admin consent for Application Registration. Defaults to `true`.                                                         |
-| `azureClientId`                         | no       | Application Id of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.    |
-| `azureClientSecret`                     | no       | Application Secret of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`. |
-| `azurePrincipalId`                      | no       | Principal Id of the Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.              |
-| `azureAccountType`                      | no       | Type of the Azure account to integrate.                                                                                       |
-| `location`                              | no       | Location for the resources deployed in this solution.                                                                         |
-| `tags`                                  | no       | Tags to be applied to all resources.                                                                                          |
-| `deployIOM`                             | no       | Deploy Indicator of Misconfiguration (IOM) integration. Defaults to `true`.                                                   |
-| `assignAzureSubscriptionPermissions`    | no       | Assign required permissions on Azure Default Subscription automatically. Defaults to `false`.                                 |
-| `assignAzureManagementGroupPermissions` | no       | Assign required permissions Azure Management Group automatically. Defaults to `true`.                                         |
-| `deployIOA`                             | no       | Deploy Indicator of Attack (IOA) integration. Defaults to `true`.                                                             |
-| `enableAppInsights`                     | no       | Enable Application Insights for additional logging of Function Apps. Defaults to `false`.                                     |
-| `deployActivityLogDiagnosticSettings`   | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                  |
-| `deployEntraLogDiagnosticSettings`      | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                     |
 
 ### Register a single Azure Subscription
 
@@ -141,6 +141,36 @@ Ensure you have a CrowdStrike API client ID and client secret for Falcon Cloud S
 
 - **Owner** role of the Azure subscription to be integrated into CrowdStrike Falcon Cloud Security
 
+#### Parameters
+
+You can use any of these methods to pass parameters:
+
+- Generate a parameter file: [generate-params](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/bicep-cli#generate-params)
+- Deploy the Bicep file using the parameters file: [deploy bicep file with parameters file](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/parameter-files?tabs=Bicep#deploy-bicep-file-with-parameters-file)
+- Pass the parameters as arguments: [inline-parameters](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-cli#inline-parameters)
+
+| Parameter name                        | Required | Description                                                                                                                    |
+|---------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------|
+| `defaultSubscriptionId`               | yes      | Subscription Id of the default Azure Subscription.                                                                             |
+| `falconCID`                           | yes      | CID for the Falcon API.                                                                                                        |
+| `falconClientId`                      | yes      | Client ID for the Falcon API.                                                                                                  |
+| `falconClientSecret`                  | yes      | Client secret for the Falcon API.                                                                                              |
+| `falconCloudRegion`                   | yes      | Falcon cloud region. Allowed values are `US-1`, `US-2`, or `EU-1`.                                                             |
+| `useExistingAppRegistration`          | no       | Use an existing Application Registration. Defaults to `false`.                                                                 |
+| `grantAppRegistrationAdminConsent`    | no       | Grant admin consent for Application Registration. Defaults to `true`.                                                          |
+| `azureClientId`                       | no       | Application Id of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.     |
+| `azureClientSecret`                   | no       | Application Secret of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`. |
+| `azurePrincipalId`                    | no       | Principal Id of the Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.               |
+| `azureAccountType`                    | no       | Type of the Azure account to integrate.                                                                                        |
+| `location`                            | no       | Location for the resources deployed in this solution.                                                                          |
+| `tags`                                | no       | Tags to be applied to all resources.                                                                                           |
+| `deployIOM`                           | no       | Deploy Indicator of Misconfiguration (IOM) integration. Defaults to `true`.                                                    |
+| `assignAzureSubscriptionPermissions`  | no       | Assign required permissions on Azure Default Subscription automatically. Defaults to `true`.                                   |
+| `deployIOA`                           | no       | Deploy Indicator of Attack (IOA) integration. Defaults to `true`.                                                              |
+| `enableAppInsights`                   | no       | Enable Application Insights for additional logging of Function Apps. Defaults to `false`.                                      |
+| `deployActivityLogDiagnosticSettings` | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                   |
+| `deployEntraLogDiagnosticSettings`    | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                      |
+
 #### Deployment command
 
 ```sh
@@ -152,54 +182,31 @@ az deployment sub create --name 'cs-subscription-deployment' --location westus \
 > [!NOTE]
 > The deployment command can be executed multiple times to register additional Azure subscriptions into CrowdStrike Falcon Cloud Security.
 
-#### Parameters
-
-You can use any of these methods to pass parameters:
-
-- Generate a parameter file: [generate-params](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/bicep-cli#generate-params)
-- Deploy the Bicep file using the parameters file: [deploy bicep file with parameters file](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/parameter-files?tabs=Bicep#deploy-bicep-file-with-parameters-file)
-- Pass the parameters as arguments: [inline-parameters](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-cli#inline-parameters)
-
-| Parameter name                        | Required | Description                                                                                                                  |
-|---------------------------------------|----------|------------------------------------------------------------------------------------------------------------------------------|
-| `defaultSubscriptionId`               | yes      | Subscription Id of the default Azure Subscription.                                                                           |
-| `falconCID`                           | yes      | CID for the Falcon API.                                                                                                      |
-| `falconClientId`                      | yes      | Client ID for the Falcon API.                                                                                                |
-| `falconClientSecret`                  | yes      | Client secret for the Falcon API.                                                                                            |
-| `falconCloudRegion`                   | yes      | Falcon cloud region. Allowed values are `US-1`, `US-2`, or `EU-1`.                                         |
-| `useExistingAppRegistration`          | no       | Use an existing Application Registration. Defaults to `false`.                                                               |
-| `grantAppRegistrationAdminConsent`    | no       | Grant admin consent for Application Registration. Defaults to `true`.                                                        |
-| `azureClientId`                       | no       | Application Id of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.   |
-| `azureClientSecret`                   | no       | Application Secret of an existing Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`. |
-| `azurePrincipalId`                    | no       | Principal Id of the Application Registration in Entra ID. Only used with parameter `useExistingAppRegistration`.             |
-| `azureAccountType`                    | no       | Type of the Azure account to integrate.                                                                                      |
-| `location`                            | no       | Location for the resources deployed in this solution.                                                                        |
-| `tags`                                | no       | Tags to be applied to all resources.                                                                                         |
-| `deployIOM`                           | no       | Deploy Indicator of Misconfiguration (IOM) integration. Defaults to `true`.                                                  |
-| `assignAzureSubscriptionPermissions`  | no       | Assign required permissions on Azure Default Subscription automatically. Defaults to `true`.                                 |
-| `deployIOA`                           | no       | Deploy Indicator of Attack (IOA) integration. Defaults to `true`.                                                            |
-| `enableAppInsights`                   | no       | Enable Application Insights for additional logging of Function Apps. Defaults to `false`.                                    |
-| `deployActivityLogDiagnosticSettings` | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                 |
-| `deployEntraLogDiagnosticSettings`    | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                    |
-
 ### Troubleshooting
 
-#### Key Vault already existing
+#### Existing Key Vault
 
-When using our bicep files to set up Indicator Of Attack, a Key Vault is created to store sensible information.
-As per Microsoft's recommendation, the Key Vault is created with [purge protection](https://learn.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview#purge-protection) enabled.
+When using our Bicep files to set up Indicator Of Attack, a Key Vault is created to store sensitive information. As per Microsoft's recommendation, the Key Vault is created with [purge protection](https://learn.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview#purge-protection) enabled.
 
 When deleting the resource group _cs-ioa-group_, the Key Vault gets soft-deleted.
 
-If you encounter any issues while trying to create the Key Vault, please follow [Microsoft's instruction](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-recovery?tabs=azure-portal#list-recover-or-purge-a-soft-deleted-key-vault) on how to recover a soft-deleted Key Vault.
+If you encounter any issues while trying to create the Key Vault, please follow [Microsoft's instructions](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-recovery?tabs=azure-portal#list-recover-or-purge-a-soft-deleted-key-vault) on how to recover a soft-deleted Key Vault.
 
-#### IOAs still shown as inactive for discovered subscriptions after registering an Azure management group
+#### IOAs appear inactive for discovered subscriptions after registering an Azure management group
 
 After registering a management group and manually remediating the CrowdStrike IOA Azure policy assignment, IOAs can remain inactive for some discovered subscriptions. This can happen when the diagnostic settings are not configured in the registered subscriptions.
 
 The evaluation of the assigned Azure policy responsible for the diagnostic settings creation can take some time to properly evaluate which resources need to be remediated (See [Evaluation Triggers](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/get-compliance-data#evaluation-triggers)).
 
 Make sure that all the existing subscriptions are properly listed under [resources to remediate](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#step-2-specify-remediation-task-details) when creating the remediation tasks.
+
+#### Tenant ID, application ID, principal ID, and scope are not allowed to be updated
+
+You might encounter this error when registering a management group using Bicep.
+
+This happens when you have pre-existing role assignments for the **Monitoring Contributor**, **Lab Services Reader**, and **Azure Event Hubs Data Owner** roles to a deleted management identity created by the **CrowdStrike IOA** policy assignment.
+
+In the Azure portal, navigate to **Management Groups** and select the tenant root group. Then go to **Access Control (IAM)** and delete all role assignments of the **Monitoring Contributor**, **Lab Services Reader**, and **Azure Event Hubs Data Owner** roles assigned to **Identity not found**.
 ## Contributing
 
 If you want to develop new content or improve on this collection, please open an issue or create a pull request. All contributions are welcome!

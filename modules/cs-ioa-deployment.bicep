@@ -25,6 +25,8 @@ param tags object = {
   'cstag-vendor': 'crowdstrike'
 }
 
+@minLength(32)
+@maxLength(32)
 @description('The CID for the Falcon API.')
 param falconCID string
 
@@ -55,6 +57,8 @@ param deployEntraLogDiagnosticSettings bool = true
 
 param randomSuffix string = uniqueString(resourceGroupName, defaultSubscriptionId)
 
+@minLength(36)
+@maxLength(36)
 param defaultSubscriptionId string // DO NOT CHANGE - used for registration validation
 
 param subscriptionId string = subscription().subscriptionId
@@ -79,7 +83,7 @@ param activityLogSettings object = {
   storagePrivateEndpointName: 'activity-storage-private-endpoint'
   storagePrivateEndpointConnectionName: 'cs-activity-storage-private-endpoint'
   eventHubName: 'cs-eventhub-monitor-activity-logs' // DO NOT CHANGE - used for registration validation
-  diagnosticSetttingsName: 'cs-monitor-activity-to-eventhub' // DO NOT CHANGE - used for registration validation
+  diagnosticSettingsName: 'cs-monitor-activity-to-eventhub' // DO NOT CHANGE - used for registration validation
 }
 
 /* ParameterBag for EntraId Logs */
@@ -94,7 +98,7 @@ param entraLogSettings object = {
   storagePrivateEndpointName: 'aad-storage-private-endpoint'
   storagePrivateEndpointConnectionName: 'cs-aad-storage-private-endpoint'
   eventHubName: 'cs-eventhub-monitor-aad-logs' // DO NOT CHANGE - used for registration validation
-  diagnosticSetttingsName: 'cs-aad-to-eventhub' // DO NOT CHANGE - used for registration validation
+  diagnosticSettingsName: 'cs-aad-to-eventhub' // DO NOT CHANGE - used for registration validation
 }
 
 /* Variables */
@@ -340,16 +344,16 @@ module activityDiagnosticSettings 'ioa/activityLog.bicep' = if (deployActivityLo
   name:  '${deploymentNamePrefix}-activityLog-${deploymentNameSuffix}'
   scope: subscription(subscriptionId)
   params: {
-      diagnosticSettingsName: activityLogSettings.diagnosticSetttingsName
+      diagnosticSettingsName: activityLogSettings.diagnosticSettingsName
       eventHubAuthorizationRuleId: eventHub.outputs.eventHubAuthorizationRuleId
       eventHubName: eventHub.outputs.activityLogEventHubName
   }
 }
 
-module entraDiagnosticSetttings 'ioa/entraLog.bicep' = if (deployEntraLogDiagnosticSettings) {
-  name: '${deploymentNamePrefix}-entraDiagnosticSetttings-${deploymentNameSuffix}'
+module entraDiagnosticSettings 'ioa/entraLog.bicep' = if (deployEntraLogDiagnosticSettings) {
+  name: '${deploymentNamePrefix}-entraDiagnosticSettings-${deploymentNameSuffix}'
   params: {
-    diagnosticSetttingsName: entraLogSettings.diagnosticSetttingsName
+    diagnosticSettingsName: entraLogSettings.diagnosticSettingsName
     eventHubName: eventHub.outputs.entraLogEventHubName
     eventHubAuthorizationRuleId: eventHub.outputs.eventHubAuthorizationRuleId
   }

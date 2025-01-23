@@ -14,7 +14,7 @@ param eventHubAuthorizationRuleId string
 param eventHubName string = 'cs-eventhub-monitor-aad-logs'
 
 @description('Entra ID Diagnostic Settings Name.')
-param diagnosticSetttingsName string = 'cs-aad-to-eventhub'
+param diagnosticSettingsName string = 'cs-aad-to-eventhub'
 
 /* 
   Deploy Diagnostic Settings for Microsoft Entra ID Logs
@@ -25,8 +25,8 @@ param diagnosticSetttingsName string = 'cs-aad-to-eventhub'
    - To export SignInLogs a P1 or P2 Microsoft Entra ID license is required
    - 'Security Administrator' or 'Global Administrator' Entra ID permissions are required
 */
-resource entraDiagnosticSetttings 'microsoft.aadiam/diagnosticSettings@2017-04-01' = {
-  name: diagnosticSetttingsName
+resource entraDiagnosticSettings 'microsoft.aadiam/diagnosticSettings@2017-04-01' = {
+  name: diagnosticSettingsName
   scope: tenant()
   properties: {
     eventHubAuthorizationRuleId: eventHubAuthorizationRuleId
