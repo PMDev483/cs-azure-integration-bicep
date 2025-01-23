@@ -184,16 +184,15 @@ az deployment sub create --name 'cs-subscription-deployment' --location westus \
 
 ### Troubleshooting
 
-#### Key Vault already existing
+#### Existing Key Vault
 
-When using our bicep files to set up Indicator Of Attack, a Key Vault is created to store sensible information.
-As per Microsoft's recommendation, the Key Vault is created with [purge protection](https://learn.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview#purge-protection) enabled.
+When using our Bicep files to set up Indicator Of Attack, a Key Vault is created to store sensitive information. As per Microsoft's recommendation, the Key Vault is created with [purge protection](https://learn.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview#purge-protection) enabled.
 
 When deleting the resource group _cs-ioa-group_, the Key Vault gets soft-deleted.
 
-If you encounter any issues while trying to create the Key Vault, please follow [Microsoft's instruction](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-recovery?tabs=azure-portal#list-recover-or-purge-a-soft-deleted-key-vault) on how to recover a soft-deleted Key Vault.
+If you encounter any issues while trying to create the Key Vault, please follow [Microsoft's instructions](https://learn.microsoft.com/en-us/azure/key-vault/general/key-vault-recovery?tabs=azure-portal#list-recover-or-purge-a-soft-deleted-key-vault) on how to recover a soft-deleted Key Vault.
 
-#### IOAs still shown as inactive for discovered subscriptions after registering an Azure management group
+#### IOAs appear inactive for discovered subscriptions after registering an Azure management group
 
 After registering a management group and manually remediating the CrowdStrike IOA Azure policy assignment, IOAs can remain inactive for some discovered subscriptions. This can happen when the diagnostic settings are not configured in the registered subscriptions.
 
@@ -203,13 +202,11 @@ Make sure that all the existing subscriptions are properly listed under [resourc
 
 #### Tenant ID, application ID, principal ID, and scope are not allowed to be updated
 
-It is possible that you encounter this error when running the registering a management group using Bicep.
-This happens when you have pre-existing role assignments of the **Monitoring Contributor**, **Lab Services Reader** and **Azure Event Hubs Data Owner**  roles to a deleted management identity created by the **CrowdStrike IOA** policy assignment.
+You might encounter this error when registering a management group using Bicep.
 
-In the Azure portal, navigate to Management Groups and select the tenant root group.
+This happens when you have pre-existing role assignments for the **Monitoring Contributor**, **Lab Services Reader**, and **Azure Event Hubs Data Owner** roles to a deleted management identity created by the **CrowdStrike IOA** policy assignment.
 
-Go to Access Control (IAM) and delete all role assignments of the **Monitoring Contributor**, **Lab Services Reader** and **Azure Event Hubs Data Owner** roles assigned to **Identity not found**
-
+In the Azure portal, navigate to **Management Groups** and select the tenant root group. Then go to **Access Control (IAM)** and delete all role assignments of the **Monitoring Contributor**, **Lab Services Reader**, and **Azure Event Hubs Data Owner** roles assigned to **Identity not found**.
 ## Contributing
 
 If you want to develop new content or improve on this collection, please open an issue or create a pull request. All contributions are welcome!
