@@ -15,6 +15,8 @@ targetScope = 'managementGroup'
 ])
 param targetScope string = 'ManagementGroup'
 
+@minLength(36)
+@maxLength(36)
 @description('Subscription Id of the default Azure Subscription.')
 param defaultSubscriptionId string
 
@@ -27,6 +29,8 @@ param deploymentNameSuffix string = utcNow()
 @description('Name of the resource group.')
 param resourceGroupName string = 'cs-iom-group' // DO NOT CHANGE
 
+@minLength(32)
+@maxLength(32)
 @description('CID for the Falcon API.')
 param falconCID string
 

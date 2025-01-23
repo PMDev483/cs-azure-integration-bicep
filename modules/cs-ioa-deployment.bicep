@@ -25,6 +25,8 @@ param tags object = {
   'cstag-vendor': 'crowdstrike'
 }
 
+@minLength(32)
+@maxLength(32)
 @description('The CID for the Falcon API.')
 param falconCID string
 
@@ -55,6 +57,8 @@ param deployEntraLogDiagnosticSettings bool = true
 
 param randomSuffix string = uniqueString(resourceGroupName, defaultSubscriptionId)
 
+@minLength(36)
+@maxLength(36)
 param defaultSubscriptionId string // DO NOT CHANGE - used for registration validation
 
 param subscriptionId string = subscription().subscriptionId
