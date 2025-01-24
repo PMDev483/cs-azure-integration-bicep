@@ -27,7 +27,7 @@ module assignableScope 'azureRoleDefinitionAssignableScope.bicep' = {
     }
 
 resource modifyExistingCustomRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
-  name: guid(customRole.roleName, subscription().id)
+  name: guid(customRole.roleName, tenant().tenantId)
   properties: {
     assignableScopes: union(assignableScope.outputs.assignableScopes,[subscriptionId])
     description: customRole.roleDescription
