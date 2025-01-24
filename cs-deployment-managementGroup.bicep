@@ -110,6 +110,7 @@ module iomAzureSubscription 'modules/iom/azureSubscription.bicep' = if (deployIO
   params: {
     targetScope: targetScope
     resourceGroupName: resourceGroupName
+    defaultSubscriptionId: defaultSubscriptionId
     falconClientId: falconClientId
     falconClientSecret: falconClientSecret
     falconCloudRegion: falconCloudRegion

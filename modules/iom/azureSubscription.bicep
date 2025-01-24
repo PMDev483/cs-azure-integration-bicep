@@ -34,7 +34,7 @@ param falconClientSecret string
 @minLength(36)
 @maxLength(36)
 @description('Subscription Id of the default Azure Subscription.')
-param defaultSubscriptionId string = subscription().id
+param defaultSubscriptionId string
 
 @description('Falcon cloud region.')
 @allowed([
