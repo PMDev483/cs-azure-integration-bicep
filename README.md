@@ -36,13 +36,17 @@ The command below registers an Azure management group, including all Azure subsc
 > [!IMPORTANT]
 > Registration only supports the Azure root management group (Tenant root group).
 
-#### Prerequisite
+#### Prerequisites
 
-Ensure you have a CrowdStrike API client ID and client secret for Falcon Cloud Security. If you don't, you can set them up in the Falcon console:
+1. Ensure you have a CrowdStrike API client ID and client secret for Falcon Cloud Security with the CSPM Registration Read and Write scopes. If you don't already have API credentials, you can set them up in the Falcon console (you must be a Falcon Admin to access the API clients page):
+   - [US-1](https://falcon.crowdstrike.com/api-clients-and-keys/)
+   - [US-2](https://falcon.us-2.crowdstrike.com/api-clients-and-keys/)
+   - [EU-1](https://falcon.eu-1.crowdstrike.com/api-clients-and-keys/clients)
 
-- [US-1](https://falcon.crowdstrike.com/api-clients-and-keys/)
-- [US-2](https://falcon.us-2.crowdstrike.com/api-clients-and-keys/)
-- [EU](https://falcon.eu-1.crowdstrike.com/api-clients-and-keys/clients)
+2. [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/) must be installed on your local machine
+> [!IMPORTANT]
+> This Bicep template can only be deployed via Azure CLI running on a local machine. You cannot deploy using Azure CLI in Azure Cloud Shell.
+
 
 #### Required permissions
 
@@ -55,7 +59,7 @@ Ensure you have a CrowdStrike API client ID and client secret for Falcon Cloud S
 - **Owner** role for the Azure management group to be integrated into Falcon Cloud Security
 - **Owner** role for the Azure subscription to be used for deployment of the infrastructure for Indicator of Attack (IOA) assessment
 
-#### Parameters
+#### Template Parameters
 
 You can use any of these methods to pass parameters:
 
@@ -86,6 +90,17 @@ You can use any of these methods to pass parameters:
 | `deployActivityLogDiagnosticSettings`   | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                   |
 | `deployEntraLogDiagnosticSettings`      | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                      |
 
+#### Preparation
+
+1. Download this repo to your local machine
+2. Open a new Terminal window and change directory to point at the downloaded repo
+3. Run `az login` to log into Azure via the Azure CLI. Be sure to select a subscription that is in the tenant whose root Management Group you want to register with Falcon Cloud Security.
+4. Run the deployment command provided below. To track progress of the deployment or if you encounter issues and want to see detailed error messages:
+   - Open the Azure Portal
+   - Go to Management Groups > Tenant Root Groups
+   - Select Deployments from the left menu.
+   - You will see the deployment in progress, whose default name is `cs-managementgroup-deployment`
+
 #### Deployment command
 
 ```sh
@@ -97,12 +112,11 @@ az deployment mg create --name 'cs-managementgroup-deployment' --location westus
 
 #### Remediate Azure Policy Assignment
 
-To enable indicators of attack (IOAs) for all the already existing subscriptions on Azure, you must remediate the **CrowdStrike IOA** Azure policy assignment manually.
+Once deployment has completed, in order to enable indicators of attack (IOAs) for all the existing subscriptions on Azure, you must remediate the **CrowdStrike IOA** Azure policy assignment manually.
 
 1. In the Azure portal, navigate to **Management Groups** and select the tenant root group.
 2. Go to **Governance** > **Policy** and select **Authoring** > **Assignments**.
 3. Click the **CrowdStrike IOA** assignment and then remediate the assignment by [creating a remediation task from a non-compliant policy assignment](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources?tabs=azure-portal#option-2-create-a-remediation-task-from-a-non-compliant-policy-assignment).
-4. Click **Validate** to return to the cloud accounts page. Allow about two hours for the data to be available.
 
 ### Register a single Azure Subscription
 
