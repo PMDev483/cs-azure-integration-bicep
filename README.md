@@ -215,8 +215,8 @@ If you want to develop new content or improve on this collection, please open an
 
 This is a community-driven, open source project aimed to register Falcon Cloud Security with Azure using Bicep. While not an official CrowdStrike product, this repository is maintained by CrowdStrike and supported in collaboration with the open source developer community.
 
-For additional information, please refer to the [SUPPORT.md](https://github.com/CrowdStrike/cs-azure-integration-bicep/main/SUPPORT.md) file.
+For additional information, please refer to the [SUPPORT.md](SUPPORT.md) file.
 
 ## License Information
 
-See the [LICENSE](https://github.com/CrowdStrike/cs-azure-integration-bicep/main/LICENSE) for more information.
+See the [LICENSE](LICENSE) for more information.
