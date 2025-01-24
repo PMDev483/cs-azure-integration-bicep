@@ -17,7 +17,7 @@ var customRole = {
 }
 
 resource customRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
-  name: guid(customRole.roleName, subscription().id,'test')
+  name: guid(customRole.roleName, tenant().tenantId)
   properties: {
     assignableScopes: [subscription().id]
     description: customRole.roleDescription
