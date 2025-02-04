@@ -340,6 +340,16 @@ module entraLogFunction 'ioa/functionApp.bicep' = {
   ]
 }
 
+/* Create user-assigned Managed Identity to be used for getting all Azure Subscriptions */
+module activityLogIdentity 'ioa/activityLogIdentity.bicep' = if (deployActivityLogDiagnosticSettings) {
+  name: '${deploymentNamePrefix}-activityLogIdentity-${deploymentNameSuffix}'
+  scope: scope
+  params: {
+    activityLogIdentityName: 'cs-activityLogDeployment-${defaultSubscriptionId}'
+  }
+}
+
+/* Deploy Activity Log Diagnostic Settings for current Azure subscription */
 module activityDiagnosticSettings 'ioa/activityLog.bicep' = if (deployActivityLogDiagnosticSettings) {
   name:  '${deploymentNamePrefix}-activityLog-${deploymentNameSuffix}'
   scope: subscription(subscriptionId)
@@ -375,3 +385,5 @@ module setAzureDefaultSubscription 'ioa/defaultSubscription.bicep' = {
 output eventHubAuthorizationRuleId string = eventHub.outputs.eventHubAuthorizationRuleId
 output activityLogEventHubName string = eventHub.outputs.activityLogEventHubName
 output entraLogEventHubName string = eventHub.outputs.entraLogEventHubName
+output activityLogIdentityId string = activityLogIdentity.outputs.activityLogIdentityId
+output activityLogIdentityPrincipalId string = activityLogIdentity.outputs.activityLogIdentityPrincipalId

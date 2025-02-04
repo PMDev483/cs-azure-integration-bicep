@@ -137,7 +137,7 @@ module iomAzureManagementGroup 'modules/iom/azureManagementGroupRoleAssignment.b
 module ioaAzureSubscription 'modules/cs-ioa-deployment.bicep' = if (deployIOA && targetScope == 'ManagementGroup') {
   name: '${deploymentNamePrefix}-ioa-azureSubscription-${deploymentNameSuffix}'
   scope: subscription(defaultSubscriptionId) // DO NOT CHANGE
-  params:{
+  params: {
     falconCID: falconCID
     falconClientId: falconClientId
     falconClientSecret: falconClientSecret
@@ -149,6 +149,28 @@ module ioaAzureSubscription 'modules/cs-ioa-deployment.bicep' = if (deployIOA &&
     location: location
     tags: tags
   }
+}
+
+module activityLogIdentityRoleAssignment 'modules/ioa/activityLogIdentityRoleAssignment.bicep' = if (deployIOA && targetScope == 'ManagementGroup' && deployActivityLogDiagnosticSettings) {
+  name: '${deploymentNamePrefix}-ioa-activityLogIdentityRoleAssignment-${deploymentNameSuffix}'
+  params: {
+    activityLogIdentityId: ioaAzureSubscription.outputs.activityLogIdentityId
+    activityLogIdentityPrincipalId: ioaAzureSubscription.outputs.activityLogIdentityPrincipalId
+  }
+}
+
+module activityLogDiagnosticSettingsDeployment 'modules/cs-ioa-diagnosticsettings-deployment.bicep' = if (deployIOA && targetScope == 'ManagementGroup' && deployActivityLogDiagnosticSettings) {
+  name: '${deploymentNamePrefix}-ioa-activityLogDiagnosticSettingsDeployment-${deploymentNameSuffix}'
+  scope: subscription(defaultSubscriptionId)
+  params: {
+    activityLogIdentityId: ioaAzureSubscription.outputs.activityLogIdentityId
+    defaultSubscriptionId: defaultSubscriptionId
+    eventHubName: ioaAzureSubscription.outputs.activityLogEventHubName
+    eventHubAuthorizationRuleId: ioaAzureSubscription.outputs.eventHubAuthorizationRuleId
+  }
+  dependsOn: [
+    activityLogIdentityRoleAssignment
+  ]
 }
 
 module ioaAzurePolicyAssignment 'modules/ioa/activityLogPolicy.bicep' = if (deployIOA && targetScope == 'ManagementGroup' && deployActivityLogDiagnosticSettings) {
