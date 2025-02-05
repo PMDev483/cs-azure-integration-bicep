@@ -126,7 +126,8 @@ module iomAzureSubscription 'modules/iom/azureSubscription.bicep' = if (deployIO
 module ioaAzureSubscription 'modules/cs-ioa-deployment.bicep' = if (deployIOA && targetScope == 'Subscription') {
   name: '${deploymentNamePrefix}-ioa-azureSubscription-${deploymentNameSuffix}'
   scope: subscription(defaultSubscriptionId)
-  params:{
+  params: {
+    targetScope: targetScope
     falconCID: falconCID
     falconClientId: falconClientId
     falconClientSecret: falconClientSecret

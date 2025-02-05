@@ -8,6 +8,13 @@ targetScope = 'subscription'
 */
 
 /* Parameters */
+@description('Targetscope of the IOM integration.')
+@allowed([
+  'ManagementGroup'
+  'Subscription'
+])
+param targetScope string
+
 @description('The location for the resources deployed in this solution.')
 param location string = deployment().location
 
@@ -341,7 +348,7 @@ module entraLogFunction 'ioa/functionApp.bicep' = {
 }
 
 /* Create user-assigned Managed Identity to be used for getting all Azure Subscriptions */
-module activityLogIdentity 'ioa/activityLogIdentity.bicep' = if (deployActivityLogDiagnosticSettings) {
+module activityLogIdentity 'ioa/activityLogIdentity.bicep' = if (deployActivityLogDiagnosticSettings && targetScope == 'ManagementGroup') {
   name: '${deploymentNamePrefix}-activityLogIdentity-${deploymentNameSuffix}'
   scope: scope
   params: {
@@ -350,7 +357,7 @@ module activityLogIdentity 'ioa/activityLogIdentity.bicep' = if (deployActivityL
 }
 
 /* Deploy Activity Log Diagnostic Settings for current Azure subscription */
-module activityDiagnosticSettings 'ioa/activityLog.bicep' = if (deployActivityLogDiagnosticSettings) {
+module activityDiagnosticSettings 'ioa/activityLog.bicep' = {
   name:  '${deploymentNamePrefix}-activityLog-${deploymentNameSuffix}'
   scope: subscription(subscriptionId)
   params: {

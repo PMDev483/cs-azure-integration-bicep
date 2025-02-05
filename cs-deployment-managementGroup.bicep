@@ -97,8 +97,11 @@ param deployIOA bool = true
 #disable-next-line no-unused-params
 param enableAppInsights bool = false
 
-@description('Deploy Activity Log Diagnostic Settings. Defaults to true.')
+@description('Deploy Activity Log Diagnostic Settings to all active Azure subscriptions. Defaults to true.')
 param deployActivityLogDiagnosticSettings bool = true
+
+@description('Deploy Activity Log Diagnostic Settings policy. Defaults to true.')
+param deployActivityLogDiagnosticSettingsPolicy bool = true
 
 @description('Deploy Entra Log Diagnostic Settings. Defaults to true.')
 param deployEntraLogDiagnosticSettings bool = true
@@ -138,6 +141,7 @@ module ioaAzureSubscription 'modules/cs-ioa-deployment.bicep' = if (deployIOA &&
   name: '${deploymentNamePrefix}-ioa-azureSubscription-${deploymentNameSuffix}'
   scope: subscription(defaultSubscriptionId) // DO NOT CHANGE
   params: {
+    targetScope: targetScope
     falconCID: falconCID
     falconClientId: falconClientId
     falconClientSecret: falconClientSecret
@@ -173,7 +177,7 @@ module activityLogDiagnosticSettingsDeployment 'modules/cs-ioa-diagnosticsetting
   ]
 }
 
-module ioaAzurePolicyAssignment 'modules/ioa/activityLogPolicy.bicep' = if (deployIOA && targetScope == 'ManagementGroup' && deployActivityLogDiagnosticSettings) {
+module activityLogDiagnosticSettingsPolicyAssignment 'modules/ioa/activityLogPolicy.bicep' = if (deployIOA && targetScope == 'ManagementGroup' && deployActivityLogDiagnosticSettingsPolicy) {
   name: '${deploymentNamePrefix}-ioa-azurePolicyAssignment-${deploymentNameSuffix}'
   scope: managementGroup()
   params: {
