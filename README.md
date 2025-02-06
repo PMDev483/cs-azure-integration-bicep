@@ -34,9 +34,15 @@ The Bicep files in this repo register an Azure management group (and all Subscri
 - If the `deployIOA` parameter is set to true, the file also:
    - Deploys an Event Hub Namespace, two Event Hubs, two App Service Plans, and additional infrastructure to the subscription that has been designated as the default subscription (which is done via the `defaultSubscriptionId` parameter). This infrastructure is used to stream Entra ID Sign In and Audit Logs, as well as Azure Activity logs, to Falcon Cloud Security.
    - Creates a Microsoft Entra ID diagnostic setting that forwards Sign In and Audit Logs to the newly-created Event Hub
-   - (Individual subscription deployments only) Creates an Azure Activity Log diagnostic setting in the subscription being registered with Falcon Cloud Security that forwards Activity Logs to the newly-created Event Hub
-   - (Management group deployments only) Creates an Azure policy definition and management group assignment that will create an Azure Activity Log diagnostic settings that forwards Activity Logs to the newly-created Event Hub
+   - Individual subscription deployments only:
+      - Creates an Azure Activity Log diagnostic setting in the subscription being registered with Falcon Cloud Security that forwards Activity Logs to the newly-created Event Hub
+   - Management group deployments only:
+      - Creates a user-assigned managed identity with `Reader` permissions on the Tenant root group to list enabled subscriptions
+      - Creates an Azure Activity Log diagnostic setting in all active subscriptions that forwards Activity Logs to the newly-created Event Hub
+      - Creates an Azure policy definition and management group assignment that will create an Azure Activity Log diagnostic settings for new subscriptions that forwards Activity Logs to the newly-created Event Hub
 
+> [!NOTE]
+> The user-assigned managed identity created during management group deployment is only used to get a list of all active subscriptions in a tenant and can be safely removed after a successful registration. The underlying resources using the user-assigned managed identity are removed automatically. 
    
 > [!IMPORTANT]
 > Management Group Deployments only support registration at the Azure root management group (Tenant root group).
@@ -58,8 +64,8 @@ The Bicep files in this repo register an Azure management group (and all Subscri
 - **Application Developer**, **Cloud Application Administrator**, or **Application Administrator** role in Microsoft Entra ID to create the app registration in Microsoft Entra ID
 - **Privileged Role Administrator** or **Global Administrator** role in Microsoft Entra ID to provide administrative consent to the requested Microsoft Graph API permissions.
 
-  > [!NOTE]
-  > Use the optional `grantAdminConsent` parameter to disable granting administrative consent to the requested Microsoft Graph API permissions automatically.
+> [!NOTE]
+> Use the optional `grantAdminConsent` parameter to disable granting administrative consent to the requested Microsoft Graph API permissions automatically.
 
 - **Owner** role for the Azure management group to be integrated into Falcon Cloud Security
 - **Owner** role for the Azure subscription to be used for deployment of the infrastructure for Indicator of Attack (IOA) assessment
@@ -92,7 +98,8 @@ You can use any of these methods to pass parameters:
 | `assignAzureManagementGroupPermissions` | no       | Assign required permissions Azure Management Group automatically. Defaults to `true` when deploying to Management Group, defaults to `false` when deploying to indidvidual Subscription.|
 | `deployIOA`                             | no       | Deploy Indicator of Attack (IOA) integration. Defaults to `true`.                                                              |
 | `enableAppInsights`                     | no       | Enable Application Insights for additional logging of Function Apps. Defaults to `false`.                                      |
-| `deployActivityLogDiagnosticSettings`   | no       | Deploy Activity Log Diagnostic Settings. Defaults to `true`.                                                                   |
+| `deployActivityLogDiagnosticSettings`   | no       | Deploy Activity Log Diagnostic Settings to all active Azure subscriptions. Defaults to `true`.                                 |
+| `deployActivityLogDiagnosticSettingsPolicy`   | no       | Deploy Activity Log Diagnostic Settings policy. Defaults to `true`.'                                                     |
 | `deployEntraLogDiagnosticSettings`      | no       | Deploy Entra Log Diagnostic Settings. Defaults to `true`.                                                                      |
 
 ## Resource Names
@@ -137,9 +144,14 @@ To track progress of the deployment or if you encounter issues and want to see d
    - You will see the deployment in progress, whose default name is `cs-managementgroup-deployment`
 
 
-#### Remediate Azure Policy Assignment
+#### Remediate existing subscriptions using Azure Policy
 
-Once deployment has completed, in order to enable indicators of attack (IOAs) for all the existing subscriptions on Azure, you must remediate the **CrowdStrike IOA** Azure policy assignment manually.
+If the default deployment of Azure Activity Log diagnostic settings to all active subscriptions has been disabled, you can use a remeditation task as part of Azure Policy to deploy Azure Activity Log diagnostic settings to existing subscriptions in a tenant to enable indicators of attack (IOAs).
+
+> [!NOTE]
+> Once an Azure Policy assignment has been created it takes time for Azure Policy to evaluate the compliance state of existing subscriptions. There is no predefined expectation of when the evaluation cycle completes. Please see [Azure Policy Evaluation Triggers](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/get-compliance-data#evaluation-triggers) for more information.
+
+To start a manual remediation task:
 
 1. In the Azure portal, navigate to **Management Groups** and select the tenant root group.
 2. Go to **Governance** > **Policy** and select **Authoring** > **Assignments**.
