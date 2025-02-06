@@ -19,7 +19,7 @@ param eventHubAuthorizationRuleId string
 param eventHubName string = 'cs-eventhub-monitor-activity-logs'
 
 param csIOAPolicySettings object = {
-  name: 'Activity Logs must be send to CrowdStrike for IOA assessment'
+  name: 'Activity Logs must be sent to CrowdStrike for IOA assessment'
   policyDefinition: json(loadTextContent('../../policies/cs-ioa-policy/cs-ioa-policy.json'))
   parameters: {}
   identity: true
